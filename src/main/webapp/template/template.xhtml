@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href= "#{facesContext.externalContext.requestContextPath}/resources/css/style.css" rel="stylesheet" type="text/css" />
+        <link href= "#{facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <h:outputScript library="js" name="javascript.js"/>
+        
+        <title>
+            <ui:insert name="title"></ui:insert>
+        </title>
+        
+        <ui:insert name="scripts"></ui:insert>        
+        
+        <script type="text/javascript">
+            
+            function formatoNumerico(input)
+            {
+                var num = input.value.replace(/\./g, "");
+                if (!isNaN(num)) {
+                    num = num.toString().split("").reverse().join("").replace(/(?=\d*\.?)(\d{3})/g, '$1.');
+                    num = num.split("").reverse().join("").replace(/^[\.]/, "");
+                    input.value = num;
+                } else {
+                    input.value = input.value.replace(/[^\d\.]*/g, "");
+                }
+            }
+            
+            function permiteSoloNumeros(elEvento) {
+                // Variables que definen los caracteres permitidos
+                var permitidos = "0123456789,";
+                var teclas_especiales = [8, 37, 39, 46];
+                // 8 = BackSpace, 46 = Supr, 37 = flecha izquierda, 39 = flecha derecha                       
+
+                // Obtener la tecla pulsada
+                var evento = elEvento || window.event;
+                var codigoCaracter = evento.charCode || evento.keyCode;
+                var caracter = String.fromCharCode(codigoCaracter);
+                // Comprobar si la tecla pulsada es alguna de las teclas especiales
+                // (teclas de borrado y flechas horizontales)
+                var tecla_especial = false;
+                for (var i in teclas_especiales) {
+                    if (codigoCaracter == teclas_especiales[i]) {
+                        tecla_especial = true;
+                        break;
+                    }
+                }
+
+                // Comprobar si la tecla pulsada se encuentra en los caracteres permitidos
+                // o si es una tecla especial
+                return permitidos.indexOf(caracter) != -1 || tecla_especial;
+            }
+            
+            function validate(input){
+                input.value = input.toUpperCase();
+            } 
+
+        </script>
+        
+    </h:head>
+
+    <h:body>
+
+        <div id="top" class="top">
+            <ui:insert name="top">
+                <h:form>
+                    <!--h:graphicImage value="../resources/images/banner.jpg"/-->
+                    <!--p:outputLabel style="font-size: 24pt; font-weight: bold;color: black; position: absolute; top: 45px;left:350px;" value="Servicio Médico de la Cooperativa Ypacaraí Ltda."/-->
+                    <h:panelGroup style="float: right">
+                        <p:commandButton value="Inicio" icon="ui-icon-home" action="/template/menu?faces-redirect=true"/>&#160;
+                        <p:menuButton value="#{SecurityBean.userName}">
+                            <p:menuitem value="Cambiar contraseña" icon="ui-icon-locked"
+                                        actionListener="#{SecurityBean.nuevo}"
+                                        oncomplete="dialogoPass.show()"/>
+                            <p:separator/>
+                            <p:menuitem value="Salir" icon="ui-icon-power" action="#{SecurityBean.logout()}"/>
+                        </p:menuButton>
+                    </h:panelGroup>
+                </h:form>
+            </ui:insert>
+        </div>
+        <p:growl id="msg" globalOnly="true"/>
+        <p:dialog modal="true" showEffect="explode" 
+                  widgetVar="dialogoPass" header="Cambiar contraseña"
+                  hideEffect="bounce" styleClass="sin-borde"
+                  closeOnEscape="true">
+            <h:form id="passwordForm">
+                <p:panelGrid columns="3" id="panelGrid">
+                    <p:outputLabel for="actual" value="Actual"/>
+                    <p:password id="actual" value="#{SecurityBean.password}"
+                                required="true" requiredMessage="requerido"
+                                validator="#{SecurityBean.passwordValidator}"/>
+                    <p:message id="msg-actual" for="actual"/>
+
+                    <p:outputLabel for="nuevo" value="Nuevo"/>
+                    <p:password id="nuevo" value="#{SecurityBean.nuevoPassword}"
+                                feedback="true" match="confirmar"
+                                validatorMessage="las contraseñas no coinciden"
+                                required="true" requiredMessage="requerido"/>
+                    <p:message id="msg-nuevo" for="nuevo"/>
+
+                    <p:outputLabel for="confirmar" value="Confirmar"/>
+                    <p:password id="confirmar" value="#{SecurityBean.nuevoPassword}"
+                                required="true" requiredMessage="requerido"/>
+                    <p:message id="msg-confirmar" for="confirmar"/>
+
+                    <p:commandButton value="Guardar" icon="ui-icon-disk" 
+                                     actionListener="#{SecurityBean.cambiarPassword}"
+                                     oncomplete="if(!args.validationFailed) dialogoPass.hide()"
+                                     update="msg-actual msg-nuevo msg-confirmar :msg"/>
+                    <p:commandButton value="Cancelar" icon="ui-icon-close" 
+                                     onclick="dialogoPass.hide()"
+                                     immediate="true" process="@this"/>
+                </p:panelGrid>
+            </h:form>
+        </p:dialog>
+        <div>
+            <div id="left">
+                <ui:insert name="left">
+                    <h:form>
+                        <p:menu style="width: 196px" model="#{SecurityBean.menus}"/>
+                    </h:form>
+                </ui:insert>
+            </div>
+            <div id="content" class="left_content">
+                <ui:insert name="content"></ui:insert>
+            </div>
+        </div>
+    </h:body>
+
+</html>

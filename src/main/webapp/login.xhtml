@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <title>In Class</title>
+        <link href= "#{facesContext.externalContext.requestContextPath}/resources/css/style.css" rel="stylesheet" type="text/css" />
+    </h:head>
+    
+    <h:body>
+        <div class="wrapper">
+            <div class="top">
+                <h:form id="frm_login">
+                    <p:growl id="growl" showDetail="true"/>  
+                    <p:panel header="#{bBase['login.title']}">
+                        <p:panelGrid columns="3">
+                            <h:outputText value="#{bBase['login.user']}"/>
+                            <p:inputText id="usuario"
+                                         value="#{SecurityBean.userName}"
+                                         required="true"
+                                         requiredMessage="#{bBase['required']}"/>
+                            <p:message for="usuario"/>
+                            <h:outputText value="#{bBase['login.pass']}"/>
+                            <h:inputSecret id="contrasena"
+                                           value="#{SecurityBean.password}"
+                                           required="true"
+                                           requiredMessage="#{bBase['required']}"/>
+                            <p:message for="contrasena"/>
+                            <p:commandButton icon="ui-icon ui-icon-circle-check" 
+                                             value="#{bBase['login.action']}" 
+                                             action="#{SecurityBean.login}"
+                                             update="frm_login:growl"
+                                             validateClient="true"/>
+                        </p:panelGrid>
+                    </p:panel>
+                </h:form>
+
+            </div>
+
+        </div>
+        
+    </h:body>
+</html>
+

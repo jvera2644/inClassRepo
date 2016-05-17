@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+    <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                    template="template.xhtml">
+        
+        <ui:define name="title">In Class MENU</ui:define>
+        
+        <ui:define name="scripts">
+            <h:outputScript library="js" name="jquery-2.1.1.js"/>
+            <h:outputScript library="js" name="jquery.marquee.min.js"/>
+            <script type="text/javascript">
+                var jquery = jQuery.noConflict();
+                jquery(document).ready(function() {
+                    jquery('.marquee').marquee({
+                        //speed in milliseconds of the marquee
+                        duration: 10000,
+                        //gap in pixels between the tickers
+                        gap: 50,
+                        //time in milliseconds before the marquee will start animating
+                        delayBeforeStart: 0,
+                        //'left' or 'right'
+                        direction: 'left',
+                        //true or false - should the marquee be duplicated to show an effect of continues flow
+                        duplicated: true,
+                        pauseOnHover: true
+                    });
+                });
+            </script>
+            <style type="text/css">
+                .marquee {
+                    width: 100%;
+                    overflow: hidden;
+                    border: 1px solid #ccc;
+                    background: yellow;
+                }
+            </style>
+        </ui:define>
+        
+        
+    </ui:composition>
+</html>
+

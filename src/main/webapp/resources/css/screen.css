@@ -1,0 +1,27 @@
+/* 
+    Created on : 22/08/2014, 10:17:09 AM
+    Author     : Administracion
+*/
+* {
+    font-size: 9pt;
+}
+
+.sin-borde .ui-panelgrid tr, .sin-borde .ui-panelgrid td {
+    border: none
+}
+
+.ui-icon-detail{
+    text-indent: -9999px;
+    background: url(../images/detalles.png) !important;
+    width: 21px;
+    height: 21px;
+    display: inline-block;
+}
+
+.ui-icon-erase{
+    text-indent: -9999px;
+    background-image: url(../images/anular.png) !important;
+    width: 21px;
+    height: 21px;
+    display: inline-block;
+}
