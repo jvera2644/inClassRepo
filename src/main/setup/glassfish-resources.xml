@@ -12,4 +12,5 @@
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="DSINCLASS" object-type="user" pool-name="post-gre-sql_unidb_postgresPool"/>
     <jdbc-resource enabled="true" jndi-name="DATASINCLASS" object-type="user" pool-name="post-gre-sql_unidb_postgresPool"/>
+    <jdbc-resource enabled="true" jndi-name="DS" object-type="user" pool-name="post-gre-sql_unidb_postgresPool"/>
 </resources>
