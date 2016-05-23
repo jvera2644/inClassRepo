@@ -30,9 +30,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "noticia")
-@NamedQueries({
-    @NamedQuery(name = "Noticia.findAll", query = "SELECT n FROM Noticia n")})
+@Table(name = "unidb.noticia")
 public class Noticia implements Serializable {
 
     private static final long serialVersionUID = 1L;

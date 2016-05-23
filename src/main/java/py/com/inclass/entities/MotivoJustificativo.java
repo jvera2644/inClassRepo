@@ -15,8 +15,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -27,9 +25,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "motivo_justificativo")
-@NamedQueries({
-    @NamedQuery(name = "MotivoJustificativo.findAll", query = "SELECT m FROM MotivoJustificativo m")})
+@Table(name = "unidb.motivo_justificativo")
 public class MotivoJustificativo implements Serializable {
 
     private static final long serialVersionUID = 1L;

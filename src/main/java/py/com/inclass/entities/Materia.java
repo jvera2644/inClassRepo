@@ -15,8 +15,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -27,9 +28,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "materia")
-@NamedQueries({
-    @NamedQuery(name = "Materia.findAll", query = "SELECT m FROM Materia m")})
+@Table(name = "unidb.materia")
 public class Materia implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -43,8 +42,14 @@ public class Materia implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMateria", fetch = FetchType.LAZY)
-    private Collection<MateriaCarrera> materiaCarreraCollection;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "unidb.materia_carrera", joinColumns = {
+        @JoinColumn(name = "id_materia", referencedColumnName = "id_materia")
+    },
+            inverseJoinColumns = {
+                @JoinColumn(name = "id_carrera", referencedColumnName = "id_carrera")
+            })
+    private Collection<Carrera> carreraCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMateria", fetch = FetchType.LAZY)
     private Collection<Horario> horarioCollection;
 
@@ -74,14 +79,6 @@ public class Materia implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Collection<MateriaCarrera> getMateriaCarreraCollection() {
-        return materiaCarreraCollection;
-    }
-
-    public void setMateriaCarreraCollection(Collection<MateriaCarrera> materiaCarreraCollection) {
-        this.materiaCarreraCollection = materiaCarreraCollection;
     }
 
     public Collection<Horario> getHorarioCollection() {
@@ -116,5 +113,14 @@ public class Materia implements Serializable {
     public String toString() {
         return "py.com.inclass.entities.Materia[ idMateria=" + idMateria + " ]";
     }
+
+    public Collection<Carrera> getCarreraCollection() {
+        return carreraCollection;
+    }
+
+    public void setCarreraCollection(Collection<Carrera> carreraCollection) {
+        this.carreraCollection = carreraCollection;
+    }
+       
     
 }

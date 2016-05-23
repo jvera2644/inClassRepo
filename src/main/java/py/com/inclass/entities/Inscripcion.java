@@ -16,8 +16,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -28,9 +26,7 @@ import javax.validation.constraints.NotNull;
  * @author Edu
  */
 @Entity
-@Table(name = "inscripcion")
-@NamedQueries({
-    @NamedQuery(name = "Inscripcion.findAll", query = "SELECT i FROM Inscripcion i")})
+@Table(name = "unidb.inscripcion")
 public class Inscripcion implements Serializable {
 
     private static final long serialVersionUID = 1L;

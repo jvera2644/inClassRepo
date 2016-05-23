@@ -17,8 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -29,9 +27,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "barrio")
-@NamedQueries({
-    @NamedQuery(name = "Barrio.findAll", query = "SELECT b FROM Barrio b")})
+@Table(name = "unidb.barrio")
 public class Barrio implements Serializable {
 
     private static final long serialVersionUID = 1L;

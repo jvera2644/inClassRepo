@@ -30,7 +30,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "turno")
+@Table(name = "unidb.turno")
 @NamedQueries({
     @NamedQuery(name = "Turno.findAll", query = "SELECT t FROM Turno t")})
 public class Turno implements Serializable {
