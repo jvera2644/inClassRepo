@@ -64,17 +64,14 @@ public class Persona implements Serializable {
     @Column(name = "direccion")
     private String direccion;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 20)
     @Column(name = "telefono")
     private String telefono;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 20)
     @Column(name = "celular")
     private String celular;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "correo")
     private String correo;
