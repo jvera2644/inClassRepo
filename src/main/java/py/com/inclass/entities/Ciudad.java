@@ -17,8 +17,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
@@ -29,9 +27,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "ciudad")
-@NamedQueries({
-    @NamedQuery(name = "Ciudad.findAll", query = "SELECT c FROM Ciudad c")})
+@Table(name = "unidb.ciudad")
 public class Ciudad implements Serializable {
 
     private static final long serialVersionUID = 1L;

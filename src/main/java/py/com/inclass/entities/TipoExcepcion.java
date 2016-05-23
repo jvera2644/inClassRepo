@@ -27,7 +27,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "tipo_excepcion")
+@Table(name = "unidb.tipo_excepcion")
 @NamedQueries({
     @NamedQuery(name = "TipoExcepcion.findAll", query = "SELECT t FROM TipoExcepcion t")})
 public class TipoExcepcion implements Serializable {

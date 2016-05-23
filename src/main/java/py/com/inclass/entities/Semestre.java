@@ -6,18 +6,14 @@
 package py.com.inclass.entities;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -27,7 +23,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "semestre")
+@Table(name = "unidb.semestre")
 @NamedQueries({
     @NamedQuery(name = "Semestre.findAll", query = "SELECT s FROM Semestre s")})
 public class Semestre implements Serializable {
@@ -43,8 +39,6 @@ public class Semestre implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idSemestre", fetch = FetchType.LAZY)
-    private Collection<CarreraSemestre> carreraSemestreCollection;
 
     public Semestre() {
     }
@@ -72,14 +66,6 @@ public class Semestre implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
-    }
-
-    public Collection<CarreraSemestre> getCarreraSemestreCollection() {
-        return carreraSemestreCollection;
-    }
-
-    public void setCarreraSemestreCollection(Collection<CarreraSemestre> carreraSemestreCollection) {
-        this.carreraSemestreCollection = carreraSemestreCollection;
     }
 
     @Override

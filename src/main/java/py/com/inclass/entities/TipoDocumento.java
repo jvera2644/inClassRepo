@@ -27,7 +27,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "tipo_documento")
+@Table(name = "unidb.tipo_documento")
 @NamedQueries({
     @NamedQuery(name = "TipoDocumento.findAll", query = "SELECT t FROM TipoDocumento t")})
 public class TipoDocumento implements Serializable {

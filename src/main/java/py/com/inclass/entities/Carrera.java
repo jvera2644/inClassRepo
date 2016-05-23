@@ -16,10 +16,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -29,9 +28,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "carrera")
-@NamedQueries({
-    @NamedQuery(name = "Carrera.findAll", query = "SELECT c FROM Carrera c")})
+@Table(name = "unidb.carrera")
 public class Carrera implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -45,13 +42,17 @@ public class Carrera implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCarrera", fetch = FetchType.LAZY)
-    private Collection<MateriaCarrera> materiaCarreraCollection;
     @JoinColumn(name = "id_facultad", referencedColumnName = "id_facultad")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Facultad idFacultad;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idCarrera", fetch = FetchType.LAZY)
-    private Collection<CarreraSemestre> carreraSemestreCollection;
+    @ManyToMany(cascade = CascadeType.MERGE)
+    @JoinTable(name = "unidb.carrera_semestre", joinColumns = {
+        @JoinColumn(name = "id_carrera", referencedColumnName = "id_carrera")
+    },
+            inverseJoinColumns = {
+                @JoinColumn(name = "id_semestre", referencedColumnName = "id_semestre")
+            })
+    private Collection<Semestre> semestreCollection;
 
     public Carrera() {
     }
@@ -81,28 +82,12 @@ public class Carrera implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Collection<MateriaCarrera> getMateriaCarreraCollection() {
-        return materiaCarreraCollection;
-    }
-
-    public void setMateriaCarreraCollection(Collection<MateriaCarrera> materiaCarreraCollection) {
-        this.materiaCarreraCollection = materiaCarreraCollection;
-    }
-
     public Facultad getIdFacultad() {
         return idFacultad;
     }
 
     public void setIdFacultad(Facultad idFacultad) {
         this.idFacultad = idFacultad;
-    }
-
-    public Collection<CarreraSemestre> getCarreraSemestreCollection() {
-        return carreraSemestreCollection;
-    }
-
-    public void setCarreraSemestreCollection(Collection<CarreraSemestre> carreraSemestreCollection) {
-        this.carreraSemestreCollection = carreraSemestreCollection;
     }
 
     @Override
@@ -129,5 +114,14 @@ public class Carrera implements Serializable {
     public String toString() {
         return "py.com.inclass.entities.Carrera[ idCarrera=" + idCarrera + " ]";
     }
+
+    public Collection<Semestre> getSemestreCollection() {
+        return semestreCollection;
+    }
+
+    public void setSemestreCollection(Collection<Semestre> semestreCollection) {
+        this.semestreCollection = semestreCollection;
+    }
+      
     
 }

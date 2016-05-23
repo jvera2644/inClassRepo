@@ -23,9 +23,7 @@ import javax.validation.constraints.Size;
  * @author Edu
  */
 @Entity
-@Table(name = "parametro")
-@NamedQueries({
-    @NamedQuery(name = "Parametro.findAll", query = "SELECT p FROM Parametro p")})
+@Table(name = "unidb.parametro")
 public class Parametro implements Serializable {
 
     private static final long serialVersionUID = 1L;

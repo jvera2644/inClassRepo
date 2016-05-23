@@ -16,8 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -26,9 +24,7 @@ import javax.validation.constraints.NotNull;
  * @author Edu
  */
 @Entity
-@Table(name = "huella")
-@NamedQueries({
-    @NamedQuery(name = "Huella.findAll", query = "SELECT h FROM Huella h")})
+@Table(name = "unidb.huella")
 public class Huella implements Serializable {
 
     private static final long serialVersionUID = 1L;
