@@ -115,7 +115,9 @@ public class SecurityBean extends BaseBean {
         menus = new DefaultMenuModel();
         
         Set<Permiso> permisos = new HashSet<Permiso>();
+        //se obtienen los roles del usuario logeado
         for (Rol rol : usuario.getRolCollection()) {
+            //por cada rol del usuario logeado, se obtienen los permisos.
             permisos.addAll(rol.getPermisoCollection());
         }
         

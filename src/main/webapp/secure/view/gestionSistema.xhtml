@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- Importamos el template -->
+    <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                    template="./../../template/template.xhtml">
+        
+        <ui:define name="title">#{bBase['sistemManagement.title']}</ui:define>
+               
+        <ui:define name="content">
+            
+            <!--  -->
+            <h:form id="form_gestion_usuario">
+                <h1>Gestión del Sistema</h1><br/>
+                
+                <p:accordionPanel>
+                    <p:tab title="Paramétros del Sistema">
+                        <p:commandLink value="ABM Tipo Documento" action="tipoDocumento.xhtml"/>
+                    </p:tab>
+                </p:accordionPanel>
+                
+            </h:form>
+            
+            
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

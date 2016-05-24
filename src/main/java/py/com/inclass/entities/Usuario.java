@@ -65,7 +65,7 @@ public class Usuario implements Serializable {
     @NotNull
     @Column(name = "estado")
     private int estado;   
-    @ManyToMany(cascade = CascadeType.MERGE)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "unidb.usuario_rol", joinColumns = {
         @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     },
