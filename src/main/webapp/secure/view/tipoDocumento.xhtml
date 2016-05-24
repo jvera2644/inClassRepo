@@ -11,12 +11,6 @@
         
         <ui:define name="title">#{bBase['documentType.title']}</ui:define>
         
-        <!--ui:define name="top">
-            <h:form>
-                <p:commandButton value="Logout" action="#{SecurityBean.logout()}" style="float: right"/>
-            </h:form>
-        </ui:define-->
-        
         <ui:define name="content">
             
             <!-- popup -->
@@ -37,7 +31,7 @@
                               <p:inputText id="descripcion" 
                                            value="#{tipoDocumentoBean.tipoDocumento.descripcion}"
                                            required="true" 
-                                           requiredMessage="requerido"
+                                           requiredMessage="debe ingresar"
                                            size="30"
                                            maxlength="45"> 
                                 </p:inputText>
@@ -84,7 +78,7 @@
                 <p:growl id="msg" globalOnly="true"/>
                 
                 <p:dataTable value="#{tipoDocumentoBean.tiposDocumentos}" var="tipoDocumento" 
-                             paginator="true" rows="10" filteredValue="#{usuarioBean.usuariosFiltrados}"
+                             paginator="true" rows="5" filteredValue="#{usuarioBean.usuariosFiltrados}"
                              emptyMessage="No existen registros" widgetVar="lista"
                              id="idTableRow">
                     
