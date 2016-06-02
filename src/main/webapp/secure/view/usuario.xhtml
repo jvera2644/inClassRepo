@@ -27,17 +27,22 @@
                 
                 <!-- formulario alta/edición -->
                 <h:form id="form_new_edit">
+                    <!--p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /-->
+                    <p:growl id="growl" sticky="false" life="5000"/>  
                     <p:panelGrid id="panelGrid">
                         <p:row>
                             <p:column>
                                 <p:outputLabel for="nroDocumento" value="Nro. Documento"/>
                             </p:column>
                             <p:column>
-                                <p:inputText id="nroDocumento" value="#{usuarioBean.nroDocumentoPersona}"
-                                     required="true" requiredMessage="requerido">
+                                <p:inputText id="nroDocumento" 
+                                             value="#{usuarioBean.nroDocumentoPersona}"
+                                             required="true"
+                                             disabled="#{usuarioBean.modificar}">
                                     <p:ajax event="change" listener="#{usuarioBean.nroDocumentoOnChanged}" update="form_new_edit"/>
-                                </p:inputText>
-                                <h:outputText id="nomPer" value="#{usuarioBean.nombreApellidoPersona}" style="color: #AF110A"></h:outputText>
+                                </p:inputText><p:spacer width="15" height="15" />
+                                <h:outputText id="nomPer" value="#{usuarioBean.nombreApellidoPersona}"></h:outputText>
+                                <p:message for="nroDocumento" display="tooltip"/>
                             </p:column>
                         </p:row>
                         
@@ -46,13 +51,14 @@
                                 <p:outputLabel for="username" value="Usuario"/>
                           </p:column>
                           <p:column>
-                                <p:inputText id="username" value="#{usuarioBean.usuario.usuario}"
-                                     required="true" requiredMessage="requerido" 
-                                     validator="#{usuarioBean.validarNombreUsuario}">
-                                     <f:validateLength maximum="20"/>
+                                <p:inputText id="username" 
+                                             value="#{usuarioBean.usuario.usuario}"
+                                             required="true"
+                                             disabled="#{usuarioBean.modificar}">
+                                    <p:ajax event="change" listener="#{usuarioBean.nombreUsuarioOnChanged}" update="form_new_edit"/>
                                 </p:inputText>
-                                <p:message for="username"/>
-                          </p:column>
+                                <p:message for="username" display="tooltip"/>
+                          </p:column>  
                         </p:row>
                         
                         <p:row>
@@ -60,22 +66,19 @@
                                 <p:outputLabel for="password" value="Contraseña"/>
                             </p:column>
                             <p:column>
-                                <p:inputText type="password" id="password" value="#{usuarioBean.usuario.contrasena}"
-                                required="true" requiredMessage="requerido">
+                                <p:inputText type="password" 
+                                             id="password" 
+                                             value="#{usuarioBean.usuario.contrasena}"
+                                             required="true"
+                                             disabled="#{usuarioBean.modificar}">
                                 </p:inputText>
-                                <p:message for="password"/>
+                                <p:message for="password" display="tooltip"/>
                             </p:column>
                         </p:row>
                         
                         <p:row>
                             <p:column>
                                 <h:outputLabel value="Roles"/>
-                            </p:column>
-                        </p:row>
-                        
-                        <p:row>
-                            <p:column>
-                                
                             </p:column>
                             <p:column>
                                 <p:pickList label="Pick" id="pickList" value="#{usuarioBean.roles}" var="rol"   
@@ -89,9 +92,10 @@
                             <p:column>
                             <!-- boton guardar -->
                             <p:commandButton value="Guardar" icon="ui-icon-disk" 
-                                             actionListener="#{usuarioBean.crear}"
+                                             actionListener="#{usuarioBean.guardar}"
                                              oncomplete="if(!args.validationFailed) PF('dialogo').hide()"
-                                             update="form_new_edit:panelGrid :form_list"/>
+                                             update="form_new_edit:panelGrid :form_list"
+                                             disabled="#{usuarioBean.habilitaBotonGuardar}"/>
 
                             <!-- boton cancelar -->
                             <p:commandButton value="Cancelar" icon="ui-icon-close" 
@@ -163,7 +167,7 @@
                             <f:setPropertyActionListener value="#{usuario}" target="#{usuarioBean.usuario}"/>
                             <f:setPropertyActionListener target="#{usuarioBean.modificar}" value="#{true}"/>
                         </p:commandLink>
-                        <p:commandLink title="Eliminar" oncomplete="confirmacion.show()">
+                            <p:commandLink title="Eliminar" onclick="PF('confirmacion').show()">
                             <p:graphicImage value="../../resources/images/anular.png"/>
                             <f:setPropertyActionListener value="#{usuario}" target="#{usuarioBean.usuario}"/>
                         </p:commandLink>
@@ -174,11 +178,11 @@
             
             <p:confirmDialog widgetVar="confirmacion" header="Confirmación" message="Está seguro que desea eliminar?">
                 <h:form>
-                    <p:commandButton value="Sí" action="#{usuarioBean.eliminar}" 
+                    <p:commandButton value="Aceptar" action="#{usuarioBean.eliminar}" 
                                      styleClass="ui-confirmdialog-yes" 
                                      icon="ui-icon-check" update=":form_list"
-                                     oncomplete="confirmacion.hide()"/>
-                    <p:commandButton value="No" type="button" onclick="confirmacion.hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                                     oncomplete="PF('confirmacion').hide()"/>
+                    <p:commandButton value="Cancelar" type="button" onclick="PF('confirmacion').hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
                 </h:form>    
             </p:confirmDialog>
             
