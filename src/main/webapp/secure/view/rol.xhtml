@@ -9,56 +9,63 @@
     <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                     template="./../../template/template.xhtml">
         
-        <ui:define name="title">#{bBase['documentType.title']}</ui:define>
+        <ui:define name="title">#{bBase['rol.title']}</ui:define>
+        
+        <!--ui:define name="top">
+            <h:form>
+                <p:commandButton value="Logout" action="#{SecurityBean.logout()}" style="float: right"/>
+            </h:form>
+        </ui:define-->
         
         <ui:define name="content">
             
             <!-- popup -->
             <p:dialog modal="true" showEffect="explode" 
-                      widgetVar="dialogo" header="Tipo Documento"
+                      widgetVar="dialogo" header="Rol"
                       hideEffect="bounce" styleClass="sin-borde"
                       closeOnEscape="true">
                 
                 <!-- formulario alta/edición -->
                 <h:form id="form_new_edit">
+                    <!--p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /-->
+                    <p:growl id="growl" sticky="false" life="5000"/>  
                     <p:panelGrid id="panelGrid">
+                        
                         
                         <p:row>
                           <p:column>
-                                <p:outputLabel value="Descripción"/>
+                                <p:outputLabel for="descripcion" value="Descripción"/>
                           </p:column>
                           <p:column>
-                              <p:inputText id="descripcion" 
-                                           value="#{tipoDocumentoBean.tipoDocumento.descripcion}"
-                                           required="true" 
-                                           size="30" 
-                                           maxlength="45"> 
+                                <p:inputText id="descripcion" 
+                                             value="#{rolBean.rol.descripcion}"
+                                             required="true">
                                 </p:inputText>
                                 <p:message for="descripcion" display="tooltip"/>
-                          </p:column>
+                          </p:column>  
                         </p:row>
+                                                
                         
-                        <!--p:row>
+                        <p:row>
                             <p:column>
-                                <p:outputLabel value="Estado"/>
+                                <h:outputLabel value="Permisos"/>
                             </p:column>
                             <p:column>
-                                <p:selectOneRadio id="estado" value="#{tipoDocumentoBean.tipoDocumento.estado}">
-                                    <f:selectItem itemLabel="Activo" itemValue="1" />
-                                    <f:selectItem itemLabel="Inactivo" itemValue="0" />
-                                </p:selectOneRadio>
-                                <p:message for="estado"/>
+                                <p:pickList label="Pick" id="pickList" value="#{rolBean.permisos}" var="permiso"   
+                                    itemLabel="#{permiso.descripcion}" itemValue="#{permiso}" converter="hashConverter">            
+                                </p:pickList>
+                                <p:message for="pickList" />
                             </p:column>
-                        </p:row-->
-                        
+                        </p:row>
                         
                         <p:row>
                             <p:column>
                             <!-- boton guardar -->
                             <p:commandButton value="Guardar" icon="ui-icon-disk" 
-                                             actionListener="#{tipoDocumentoBean.guardar}"
+                                             actionListener="#{rolBean.guardar}"
                                              oncomplete="if(!args.validationFailed) PF('dialogo').hide()"
                                              update="form_new_edit:panelGrid :form_list"
+                                             disabled="#{rolBean.habilitaBotonGuardar}"
                                              styleClass="boton"/>
 
                             <!-- boton cancelar -->
@@ -75,11 +82,11 @@
             
             <!-- formulario listado -->
             <h:form id="form_list">
-                <h1>Listado de Tipos de Documentos</h1><br/>
+                <h1>Listado de Roles</h1><br/>
                 <p:growl id="msg" globalOnly="true"/>
                 
-                <p:dataTable value="#{tipoDocumentoBean.tiposDocumentos}" var="tipoDocumento" 
-                             paginator="true" rows="5" filteredValue="#{usuarioBean.usuariosFiltrados}"
+                <p:dataTable value="#{rolBean.roles}" var="rol" 
+                             paginator="true" rows="10" filteredValue="#{rolBean.rolesFiltrados}"
                              emptyMessage="No existen registros" widgetVar="lista"
                              id="idTableRow"
                              styleClass="table_new">
@@ -89,7 +96,7 @@
                         <!-- boton nuevo -->
                         <p:commandButton value="Nuevo" icon="ui-icon-plus" 
                                          styleClass="boton" 
-                                         actionListener="#{tipoDocumentoBean.nuevo}"
+                                         actionListener="#{rolBean.nuevo}"
                                          update=":form_new_edit:panelGrid"/>
                         
                         <!-- buscador en la tabla -->
@@ -101,14 +108,17 @@
                     </f:facet>
                     
                     <!-- columnas de la tabla -->
-                    <p:column headerText="Descripción" sortBy="#{tipoDocumento.descripcion}" filterBy="#{tipoDocumento.descripcion}" filterMatchMode="contains">
-                        <h:outputText value="#{tipoDocumento.descripcion}"/>
+                    <p:column headerText="Id Rol" sortBy="#{rol.idRol}" filterBy="#{rol.idRol}" filterMatchMode="contains">
+                        <h:outputText value="#{rol.idRol}"/>
                     </p:column>
-                    <p:column headerText="Estado" sortBy="#{tipoDocumento.estado}">
-                        <h:panelGroup rendered="#{tipoDocumento.estado eq 1}">
+                    <p:column headerText="Descripción" sortBy="#{rol.descripcion}" filterBy="#{rol.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{rol.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Estado" sortBy="#{rol.estado}" filterBy="#{rol.estado}" filterMatchMode="contains">
+                        <h:panelGroup rendered="#{rol.estado eq 1}">
                             <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_activo.gif" width="12" height="13" />
                         </h:panelGroup>
-                        <h:panelGroup rendered="#{tipoDocumento.estado eq 0}">
+                        <h:panelGroup rendered="#{rol.estado eq 0}">
                             <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_desactivo.gif" width="14" height="15" />
                         </h:panelGroup>
                     </p:column>
@@ -116,17 +126,17 @@
                         <f:facet name="header">
                             Acciones
                         </f:facet>  
-                        <p:commandLink action="#{tipoDocumentoBean.editar}" 
+                        <p:commandLink action="#{rolBean.editar}" 
                                        title="Editar" 
                                        update=":form_new_edit:panelGrid"
                                        onclick="PF('dialogo').show()">
                             <p:graphicImage value="../../resources/images/detalles.png"/>
-                            <f:setPropertyActionListener value="#{tipoDocumento}" target="#{tipoDocumentoBean.tipoDocumento}"/>
-                            <f:setPropertyActionListener target="#{tipoDocumentoBean.modificar}" value="#{true}"/>
+                            <f:setPropertyActionListener value="#{rol}" target="#{rolBean.rol}"/>
+                            <f:setPropertyActionListener target="#{rolBean.modificar}" value="#{true}"/>
                         </p:commandLink>
-                        <p:commandLink title="Eliminar" onclick="PF('confirmacion').show()">
+                            <p:commandLink title="Eliminar" onclick="PF('confirmacion').show()">
                             <p:graphicImage value="../../resources/images/anular.png"/>
-                            <f:setPropertyActionListener value="#{tipoDocumento}" target="#{tipoDocumentoBean.tipoDocumento}"/>
+                            <f:setPropertyActionListener value="#{rol}" target="#{rolBean.rol}"/>
                         </p:commandLink>
                     </p:column>
                     
@@ -135,11 +145,11 @@
             
             <p:confirmDialog widgetVar="confirmacion" header="Confirmación" message="Está seguro que desea eliminar?">
                 <h:form>
-                    <p:commandButton value="Sí" action="#{tipoDocumentoBean.eliminar}" 
+                    <p:commandButton value="Aceptar" action="#{rolBean.eliminar}" 
                                      styleClass="ui-confirmdialog-yes" 
                                      icon="ui-icon-check" update=":form_list"
                                      oncomplete="PF('confirmacion').hide()"/>
-                    <p:commandButton value="No" type="button" onclick="PF('confirmacion').hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                    <p:commandButton value="Cancelar" type="button" onclick="PF('confirmacion').hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
                 </h:form>    
             </p:confirmDialog>
             

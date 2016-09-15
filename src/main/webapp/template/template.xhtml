@@ -7,8 +7,14 @@
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href= "#{facesContext.externalContext.requestContextPath}/resources/css/style.css" rel="stylesheet" type="text/css" />
-        <link href= "#{facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" rel="stylesheet" type="text/css" />
+        <link href= "#{facesContext.externalContext.requestContextPath}/resources/css/style.css" 
+              rel="stylesheet" 
+              type="text/css" 
+              media="screen"/>
+        <link href= "#{facesContext.externalContext.requestContextPath}/resources/css/cssLayout.css" 
+              rel="stylesheet" 
+              type="text/css"
+              media="screen"/>
         <h:outputScript library="js" name="javascript.js"/>
         
         <title>
@@ -75,8 +81,7 @@
                         <p:commandButton value="Inicio" icon="ui-icon-home" action="/template/menu?faces-redirect=true"/>&#160;
                         <p:menuButton value="#{SecurityBean.userName}">
                             <p:menuitem value="Cambiar contraseña" icon="ui-icon-locked"
-                                        actionListener="#{SecurityBean.nuevo}"
-                                        oncomplete="dialogoPass.show()"/>
+                                        actionListener="#{SecurityBean.nuevo}"/>
                             <p:separator/>
                             <p:menuitem value="Salir" icon="ui-icon-power" action="#{SecurityBean.logout()}"/>
                         </p:menuButton>
@@ -84,38 +89,98 @@
                 </h:form>
             </ui:insert>
         </div>
-        <p:growl id="msg" globalOnly="true"/>
+        
+        
+        <p:messages id="msg" closable="true">
+            <p:effect type="pulsate" event="load" delay="500" />
+        </p:messages>
+        
         <p:dialog modal="true" showEffect="explode" 
                   widgetVar="dialogoPass" header="Cambiar contraseña"
                   hideEffect="bounce" styleClass="sin-borde"
                   closeOnEscape="true">
             <h:form id="passwordForm">
-                <p:panelGrid columns="3" id="panelGrid">
-                    <p:outputLabel for="actual" value="Actual"/>
-                    <p:password id="actual" value="#{SecurityBean.password}"
-                                required="true" requiredMessage="requerido"
-                                validator="#{SecurityBean.passwordValidator}"/>
-                    <p:message id="msg-actual" for="actual"/>
+                <p:panelGrid id="panelGrid">
+                    
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="actual" value="Actual"/>
+                        </p:column>
 
-                    <p:outputLabel for="nuevo" value="Nuevo"/>
-                    <p:password id="nuevo" value="#{SecurityBean.nuevoPassword}"
-                                feedback="true" match="confirmar"
-                                validatorMessage="las contraseñas no coinciden"
-                                required="true" requiredMessage="requerido"/>
-                    <p:message id="msg-nuevo" for="nuevo"/>
+                        <p:column>
+                            <p:row>
+                                <p:password id="actual" 
+                                        value="#{SecurityBean.password}"
+                                        required="true">
+                                    <p:ajax event="change" listener="#{SecurityBean.validarContrasenhaActual}" update="nuevo confirmar btnguardar :msg"/>
+                                </p:password>
+                            </p:row>
+                            
+                            <p:row>
+                                <p:message id="msg-actual" for="actual" display="tooltip"/>
+                            </p:row>
+                        </p:column>
+                    </p:row>
 
-                    <p:outputLabel for="confirmar" value="Confirmar"/>
-                    <p:password id="confirmar" value="#{SecurityBean.nuevoPassword}"
-                                required="true" requiredMessage="requerido"/>
-                    <p:message id="msg-confirmar" for="confirmar"/>
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="nuevo" value="Nuevo"/>
+                        </p:column>
 
-                    <p:commandButton value="Guardar" icon="ui-icon-disk" 
-                                     actionListener="#{SecurityBean.cambiarPassword}"
-                                     oncomplete="if(!args.validationFailed) dialogoPass.hide()"
-                                     update="msg-actual msg-nuevo msg-confirmar :msg"/>
-                    <p:commandButton value="Cancelar" icon="ui-icon-close" 
-                                     onclick="dialogoPass.hide()"
-                                     immediate="true" process="@this"/>
+                        <p:column>
+                            <p:row>
+                                <p:password id="nuevo" value="#{SecurityBean.nuevoPassword}"
+                                        feedback="true" 
+                                        match="confirmar"
+                                        validatorMessage="Nuevas contraseñas inválidas"
+                                        required="true"
+                                        disabled="#{SecurityBean.tienePermiso}"/>
+                            </p:row>
+                            
+                            <p:row>
+                                <p:message id="msg-nuevo" for="nuevo" display="tooltip"/>
+                            </p:row>
+                        </p:column>
+                    </p:row>
+
+
+                    <p:row>
+                        <p:column>
+                            <p:outputLabel for="confirmar" value="Confirmar"/>
+                        </p:column>
+
+                        <p:column>
+                            <p:row>
+                                <p:password id="confirmar" 
+                                        value="#{SecurityBean.nuevoPasswordConfirmacion}"
+                                        required="true"
+                                        disabled="#{SecurityBean.tienePermiso}">
+                                </p:password>
+                            </p:row>
+                            
+                            <p:row>
+                                <p:message id="msg-confirmar" for="confirmar" display="tooltip"/>
+                            </p:row>
+                        </p:column>
+
+                    </p:row>
+
+                    <p:row>
+                        <p:column></p:column>
+                        <p:column>
+                            <p:commandButton id="btnguardar" value="Guardar" icon="ui-icon-disk" 
+                                             actionListener="#{SecurityBean.cambiarPassword}"
+                                             oncomplete="if(!args.validationFailed) PF('dialogoPass').hide()"
+                                             update="passwordForm :msg"
+                                             disabled="#{SecurityBean.tienePermiso}"/>
+
+                            <p:commandButton value="Cancelar" icon="ui-icon-close" 
+                                             onclick="dialogoPass.hide()"
+                                             immediate="true" process="@this"/>
+                        </p:column>
+                    </p:row>
+                    
+                    
                 </p:panelGrid>
             </h:form>
         </p:dialog>
@@ -123,7 +188,7 @@
             <div id="left">
                 <ui:insert name="left">
                     <h:form>
-                        <p:menu style="width: 196px" model="#{SecurityBean.menus}"/>
+                        <p:menu style="width: 210px" model="#{SecurityBean.menus}"/>
                     </h:form>
                 </ui:insert>
             </div>

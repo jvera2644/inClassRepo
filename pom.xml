@@ -77,6 +77,11 @@
             <version>1.0.8</version>
         </dependency>
         <dependency>
+		<groupId>org.primefaces.themes</groupId>
+		<artifactId>home</artifactId>
+		<version>1.0.6</version>
+	</dependency>
+        <dependency>
             <groupId>com.sun.faces</groupId>
             <artifactId>jsf-api</artifactId>
             <version>2.1.2</version>

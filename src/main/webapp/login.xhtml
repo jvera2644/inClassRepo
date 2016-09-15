@@ -6,28 +6,26 @@
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:head>
         <title>In Class</title>
-        <link href= "#{facesContext.externalContext.requestContextPath}/resources/css/style.css" rel="stylesheet" type="text/css" />
+        <link href= "#{facesContext.externalContext.requestContextPath}/resources/css/login.css" rel="stylesheet" type="text/css" />
     </h:head>
     
     <h:body>
         <div class="wrapper">
             <div class="top">
                 <h:form id="frm_login">
-                    <p:growl id="growl" showDetail="true"/>  
+                    <p:growl id="growl"/>  
                     <p:panel header="#{bBase['login.title']}">
-                        <p:panelGrid columns="3">
-                            <h:outputText value="#{bBase['login.user']}"/>
+                        <p:panelGrid columns="2">
+                            <p:outputLabel for="usuario" value="Usuario"/>
                             <p:inputText id="usuario"
                                          value="#{SecurityBean.userName}"
-                                         required="true"
-                                         requiredMessage="#{bBase['required']}"/>
-                            <p:message for="usuario"/>
-                            <h:outputText value="#{bBase['login.pass']}"/>
+                                         required="true"/>
+                            
+                            <p:outputLabel for="contrasena" value="Contraseña"/>
                             <h:inputSecret id="contrasena"
                                            value="#{SecurityBean.password}"
-                                           required="true"
-                                           requiredMessage="#{bBase['required']}"/>
-                            <p:message for="contrasena"/>
+                                           required="true"/>
+                            
                             <p:commandButton icon="ui-icon ui-icon-circle-check" 
                                              value="#{bBase['login.action']}" 
                                              action="#{SecurityBean.login}"

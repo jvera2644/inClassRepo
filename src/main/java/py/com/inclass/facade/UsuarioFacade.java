@@ -66,8 +66,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario>{
             logger.error("Error al obtener el usuario (por usuario y contraseña) "+ nombreUsuario + ".", e);
         }
         return u;
-    }        
-    
+    }  
     
     public Usuario getUsuarioPorNombreUsuario(String nombreUsuario){
         Usuario u = null;

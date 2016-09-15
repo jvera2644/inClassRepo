@@ -60,7 +60,7 @@ public class UsuarioBean extends BaseBean {
     public void usuarioMenu() {
         usuario = new Usuario();
         roles = new DualListModel<Rol>();
-        usuarios = usuarioFacade.getAllActivos();
+        usuarios = usuarioFacade.getAll();
         habilitaBotonGuardar = false;
     }
 
@@ -86,12 +86,16 @@ public class UsuarioBean extends BaseBean {
             if (!modificar) {
                 usuario.setIntentoFallido(0);
                 usuario.setEstado(1);
+                usuario.setHabilitado("S");
                 usuarioFacade.create(usuario);
             } else {
+                if (usuario.getHabilitado().equals("S")){
+                    usuario.setIntentoFallido(0);
+                }
                 usuarioFacade.edit(usuario);
             }
             setInfoMessage(getMensajeGuardar());
-            setUsuarios(usuarioFacade.getAllActivos());
+            setUsuarios(usuarioFacade.getAll());
         } catch (Exception e) {
             setErrorMessage(getMensajeError());
             logger.error(getMensajeError(), e);
@@ -115,7 +119,7 @@ public class UsuarioBean extends BaseBean {
             Usuario unUsuario = usuario;
             unUsuario.setEstado(Integer.parseInt("0"));
             usuarioFacade.edit(unUsuario);
-            usuarios = usuarioFacade.getAllActivos();
+            usuarios = usuarioFacade.getAll();
             setInfoMessage(getMensajeGuardar());
         } catch (Exception e) {
             setWarnMessage("Es refenciada por otra entidad");

@@ -1,0 +1,37 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 07/09/2016, 10:56:38 PM
+    Author     : Edu
+*/
+
+.top {
+    border-top-left-radius: 8px;
+    -moz-border-top-left-radius: 8px;
+    -webkit-border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    -moz-border-top-right-radius: 8px;
+    -webkit-border-top-right-radius: 8px;
+    border: 1px solid #2F2B2B;
+    background: #64A6CB none repeat scroll 0% 0%;
+    box-shadow:0px 12px 40px rgba(19, 20, 19, 0.4) inset;
+    -moz-box-shadow:inset 0px 12px 40px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow:inset 0px 12px 40px rgba(0, 0, 0, 0.3);
+    color:#151313;
+    padding:60px;
+}
+
+.wrapper {
+    width: 500px;
+    margin: 120px auto 20px;
+}
+
+.ui-widget-content {
+    border: 3px solid #a8a8a8;
+    background: #192439;
+    color: #4b8787;
+    width: 107%;
+}

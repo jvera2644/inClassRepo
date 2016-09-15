@@ -9,13 +9,13 @@
     <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                     template="./../../template/template.xhtml">
         
-        <ui:define name="title">#{bBase['documentType.title']}</ui:define>
+        <ui:define name="title">#{bBase['pais.title']}</ui:define>
         
         <ui:define name="content">
             
             <!-- popup -->
             <p:dialog modal="true" showEffect="explode" 
-                      widgetVar="dialogo" header="Tipo Documento"
+                      widgetVar="dialogo" header="País"
                       hideEffect="bounce" styleClass="sin-borde"
                       closeOnEscape="true">
                 
@@ -29,7 +29,7 @@
                           </p:column>
                           <p:column>
                               <p:inputText id="descripcion" 
-                                           value="#{tipoDocumentoBean.tipoDocumento.descripcion}"
+                                           value="#{paisBean.pais.descripcion}"
                                            required="true" 
                                            size="30" 
                                            maxlength="45"> 
@@ -38,12 +38,27 @@
                           </p:column>
                         </p:row>
                         
+                        <p:row>
+                          <p:column>
+                                <p:outputLabel value="Siglas"/>
+                          </p:column>
+                          <p:column>
+                              <p:inputText id="siglas" 
+                                           value="#{paisBean.pais.siglas}"
+                                           required="true" 
+                                           size="3" 
+                                           maxlength="3"> 
+                                </p:inputText>
+                                <p:message for="siglas" display="tooltip"/>
+                          </p:column>
+                        </p:row>
+                        
                         <!--p:row>
                             <p:column>
                                 <p:outputLabel value="Estado"/>
                             </p:column>
                             <p:column>
-                                <p:selectOneRadio id="estado" value="#{tipoDocumentoBean.tipoDocumento.estado}">
+                                <p:selectOneRadio id="estado" value="#{paisBean.pais.estado}">
                                     <f:selectItem itemLabel="Activo" itemValue="1" />
                                     <f:selectItem itemLabel="Inactivo" itemValue="0" />
                                 </p:selectOneRadio>
@@ -56,7 +71,7 @@
                             <p:column>
                             <!-- boton guardar -->
                             <p:commandButton value="Guardar" icon="ui-icon-disk" 
-                                             actionListener="#{tipoDocumentoBean.guardar}"
+                                             actionListener="#{paisBean.guardar}"
                                              oncomplete="if(!args.validationFailed) PF('dialogo').hide()"
                                              update="form_new_edit:panelGrid :form_list"
                                              styleClass="boton"/>
@@ -75,11 +90,11 @@
             
             <!-- formulario listado -->
             <h:form id="form_list">
-                <h1>Listado de Tipos de Documentos</h1><br/>
+                <h1>Listado de Países</h1><br/>
                 <p:growl id="msg" globalOnly="true"/>
                 
-                <p:dataTable value="#{tipoDocumentoBean.tiposDocumentos}" var="tipoDocumento" 
-                             paginator="true" rows="5" filteredValue="#{usuarioBean.usuariosFiltrados}"
+                <p:dataTable value="#{paisBean.paises}" var="pais" 
+                             paginator="true" rows="5" 
                              emptyMessage="No existen registros" widgetVar="lista"
                              id="idTableRow"
                              styleClass="table_new">
@@ -89,7 +104,7 @@
                         <!-- boton nuevo -->
                         <p:commandButton value="Nuevo" icon="ui-icon-plus" 
                                          styleClass="boton" 
-                                         actionListener="#{tipoDocumentoBean.nuevo}"
+                                         actionListener="#{paisBean.nuevo}"
                                          update=":form_new_edit:panelGrid"/>
                         
                         <!-- buscador en la tabla -->
@@ -101,14 +116,20 @@
                     </f:facet>
                     
                     <!-- columnas de la tabla -->
-                    <p:column headerText="Descripción" sortBy="#{tipoDocumento.descripcion}" filterBy="#{tipoDocumento.descripcion}" filterMatchMode="contains">
-                        <h:outputText value="#{tipoDocumento.descripcion}"/>
+                    <p:column headerText="Id" sortBy="#{pais.idPais}" filterBy="#{pais.idPais}" filterMatchMode="contains">
+                        <h:outputText value="#{pais.idPais}"/>
                     </p:column>
-                    <p:column headerText="Estado" sortBy="#{tipoDocumento.estado}">
-                        <h:panelGroup rendered="#{tipoDocumento.estado eq 1}">
+                    <p:column headerText="Descripción" sortBy="#{pais.descripcion}" filterBy="#{pais.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{pais.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Siglas" sortBy="#{pais.siglas}" filterBy="#{pais.siglas}" filterMatchMode="contains">
+                        <h:outputText value="#{pais.siglas}"/>
+                    </p:column>
+                    <p:column headerText="Estado" sortBy="#{pais.estado}">
+                        <h:panelGroup rendered="#{pais.estado eq 1}">
                             <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_activo.gif" width="12" height="13" />
                         </h:panelGroup>
-                        <h:panelGroup rendered="#{tipoDocumento.estado eq 0}">
+                        <h:panelGroup rendered="#{pais.estado eq 0}">
                             <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_desactivo.gif" width="14" height="15" />
                         </h:panelGroup>
                     </p:column>
@@ -116,17 +137,17 @@
                         <f:facet name="header">
                             Acciones
                         </f:facet>  
-                        <p:commandLink action="#{tipoDocumentoBean.editar}" 
+                        <p:commandLink action="#{paisBean.editar}" 
                                        title="Editar" 
                                        update=":form_new_edit:panelGrid"
                                        onclick="PF('dialogo').show()">
                             <p:graphicImage value="../../resources/images/detalles.png"/>
-                            <f:setPropertyActionListener value="#{tipoDocumento}" target="#{tipoDocumentoBean.tipoDocumento}"/>
-                            <f:setPropertyActionListener target="#{tipoDocumentoBean.modificar}" value="#{true}"/>
+                            <f:setPropertyActionListener value="#{pais}" target="#{paisBean.pais}"/>
+                            <f:setPropertyActionListener target="#{paisBean.modificar}" value="#{true}"/>
                         </p:commandLink>
                         <p:commandLink title="Eliminar" onclick="PF('confirmacion').show()">
                             <p:graphicImage value="../../resources/images/anular.png"/>
-                            <f:setPropertyActionListener value="#{tipoDocumento}" target="#{tipoDocumentoBean.tipoDocumento}"/>
+                            <f:setPropertyActionListener value="#{pais}" target="#{paisBean.pais}"/>
                         </p:commandLink>
                     </p:column>
                     
@@ -135,7 +156,7 @@
             
             <p:confirmDialog widgetVar="confirmacion" header="Confirmación" message="Está seguro que desea eliminar?">
                 <h:form>
-                    <p:commandButton value="Sí" action="#{tipoDocumentoBean.eliminar}" 
+                    <p:commandButton value="Sí" action="#{paisBean.eliminar}" 
                                      styleClass="ui-confirmdialog-yes" 
                                      icon="ui-icon-check" update=":form_list"
                                      oncomplete="PF('confirmacion').hide()"/>

@@ -12,24 +12,35 @@ public class CiudadFacade  extends AbstractFacade<Ciudad>{
     
     @PersistenceContext(unitName = "INCLASSPU")
     private EntityManager em;
-    
-    public CiudadFacade(){
+
+    public CiudadFacade() {
         super(Ciudad.class);
     }
-    
+
     @Override
-    protected EntityManager getEntityManager(){
+    protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     //Ciudad
-    public List<Ciudad> getAll(){
-        try{
+    public List<Ciudad> getAll() {
+        try {
             Query query = em.createQuery("select u from Ciudad u order by u.idCiudad asc");
             return query.getResultList();
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error("Error al obtener las Ciudad.", e);
         }
-    return null;
-   }
+        return null;
+    }
+    
+    public List<Ciudad> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from Ciudad u where u.estado = 1 order by u.idCiudad asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener las ciudades activas.", e);
+            throw new RuntimeException("Error al obtener las ciudades activas.", e);
+        }
+        //return null;
+    }
 }

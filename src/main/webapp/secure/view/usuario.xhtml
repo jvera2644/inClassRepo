@@ -21,7 +21,7 @@
             
             <!-- popup -->
             <p:dialog modal="true" showEffect="explode" 
-                      widgetVar="dialogo" header="Nuevo"
+                      widgetVar="dialogo" header="Usuario"
                       hideEffect="bounce" styleClass="sin-borde"
                       closeOnEscape="true">
                 
@@ -61,18 +61,32 @@
                           </p:column>  
                         </p:row>
                         
-                        <p:row>
+                        <p:row rendered="#{!usuarioBean.modificar}">
                             <p:column>
                                 <p:outputLabel for="password" value="Contraseña"/>
                             </p:column>
                             <p:column>
-                                <p:inputText type="password" 
-                                             id="password" 
-                                             value="#{usuarioBean.usuario.contrasena}"
-                                             required="true"
-                                             disabled="#{usuarioBean.modificar}">
-                                </p:inputText>
+                                <p:password id="password" 
+                                            feedback="true"
+                                            value="#{usuarioBean.usuario.contrasena}"
+                                            required="true">
+                                </p:password>
                                 <p:message for="password" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel for="habilitado" value="Habilitado"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="habilitado" 
+                                                 value="#{usuarioBean.usuario.habilitado}"
+                                                 disabled="#{!usuarioBean.modificar}">
+                                    <f:selectItem itemLabel="SI" itemValue="S" />
+                                    <f:selectItem itemLabel="NO" itemValue="N" />
+                                </p:selectOneMenu>
+                                <p:message for="habilitado" display="tooltip"/>
                             </p:column>
                         </p:row>
                         
@@ -95,13 +109,15 @@
                                              actionListener="#{usuarioBean.guardar}"
                                              oncomplete="if(!args.validationFailed) PF('dialogo').hide()"
                                              update="form_new_edit:panelGrid :form_list"
-                                             disabled="#{usuarioBean.habilitaBotonGuardar}"/>
+                                             disabled="#{usuarioBean.habilitaBotonGuardar}"
+                                             styleClass="boton"/>
 
                             <!-- boton cancelar -->
                             <p:commandButton value="Cancelar" icon="ui-icon-close" 
                                              onclick="dialogo.hide()"
                                              immediate="true" process="@this"
-                                             update="form_new_edit"/>
+                                             update="form_new_edit"
+                                             styleClass="boton"/>
                             </p:column>
                         </p:row>                                               
                     </p:panelGrid>
@@ -109,7 +125,7 @@
             </p:dialog>
             
             <!-- formulario listado -->
-            <h:form id="form_list">
+            <h:form id="form_list" styleClass="table">
                 <h1>Listado de Usuarios</h1><br/>
                 <p:growl id="msg" globalOnly="true"/>
                 
@@ -122,7 +138,7 @@
                         
                         <!-- boton nuevo -->
                         <p:commandButton value="Nuevo" icon="ui-icon-plus" 
-                                         style="float: left; background-color: #00557F" 
+                                         styleClass="boton"
                                          actionListener="#{usuarioBean.nuevo}"
                                          update=":form_new_edit:panelGrid"/>
                         
@@ -146,6 +162,9 @@
                     </p:column>
                     <p:column headerText="Apellidos" sortBy="#{usuario.idPersona.apellido}" filterBy="#{usuario.idPersona.apellido}" filterMatchMode="contains">
                         <h:outputText value="#{usuario.idPersona.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Habilitado" sortBy="#{usuario.habilitado}" filterBy="#{usuario.habilitado}" filterMatchMode="contains">
+                        <h:outputText value="#{usuario.habilitado eq 'S' ? 'SI': 'NO'}"/>
                     </p:column>
                     <p:column headerText="Estado" sortBy="#{usuario.estado}" filterBy="#{usuario.estado}" filterMatchMode="contains">
                         <h:panelGroup rendered="#{usuario.estado eq 1}">
