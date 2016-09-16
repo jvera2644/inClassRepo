@@ -32,7 +32,8 @@
                                            value="#{ciudadBean.ciudad.descripcion}"
                                            required="true" 
                                            size="30" 
-                                           maxlength="45"> 
+                                           maxlength="45"
+                                           onkeyup="this.value=this.value.toUpperCase()"> 
                                 </p:inputText>
                                 <p:message for="descripcion" display="tooltip"/>
                           </p:column>
@@ -43,13 +44,13 @@
                                 <p:outputLabel value="Departamento"/>
                           </p:column>
                             <p:column>
-                                <h:selectOneMenu id="departamento"                                                   
+                                <p:selectOneMenu id="departamento"                                                   
                                                  converter="hashConverter"
                                                  value="#{ciudadBean.ciudad.idDepartamento}" 
                                                  required="true">
                                     <f:selectItem noSelectionOption="true" itemLabel="Seleccionar" itemValue="#{null}"/>                                    
                                     <f:selectItems value="#{ciudadBean.departamentos}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                                 <p:message for="departamento" display="tooltip"/>
                             </p:column>
                         </p:row>

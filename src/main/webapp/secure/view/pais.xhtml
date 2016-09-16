@@ -32,7 +32,8 @@
                                            value="#{paisBean.pais.descripcion}"
                                            required="true" 
                                            size="30" 
-                                           maxlength="45"> 
+                                           maxlength="45"
+                                           onkeyup="this.value=this.value.toUpperCase()"> 
                                 </p:inputText>
                                 <p:message for="descripcion" display="tooltip"/>
                           </p:column>
@@ -47,7 +48,8 @@
                                            value="#{paisBean.pais.siglas}"
                                            required="true" 
                                            size="3" 
-                                           maxlength="3"> 
+                                           maxlength="3"
+                                           onkeyup="this.value=this.value.toUpperCase()"> 
                                 </p:inputText>
                                 <p:message for="siglas" display="tooltip"/>
                           </p:column>

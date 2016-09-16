@@ -43,4 +43,15 @@ public class CiudadFacade  extends AbstractFacade<Ciudad>{
         }
         //return null;
     }
+    
+    public List<Ciudad> findCiudadesPorDepartamento(Integer idDepartamento){
+        try {
+            Query query = em.createQuery("select u from Ciudad u where u.idDepartamento.idDepartamento = :idDepartamento");
+            query.setParameter("idDepartamento", idDepartamento);
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener los ciudades para el departamento " + idDepartamento, e);
+        }
+        return null;
+    }
 }

@@ -32,7 +32,8 @@
                                              value="#{permisoBean.permiso.descripcion}"
                                              required="true" 
                                              size="30"
-                                             maxlength="45"> 
+                                             maxlength="45"
+                                             onkeyup="this.value=this.value.toUpperCase()"> 
                                 </p:inputText>
                                 <p:message for="descripcion" display="tooltip"/>
                             </p:column>
@@ -48,7 +49,8 @@
                                              required="true" 
                                              size="40"
                                              maxlength="100"
-                                             placeholder="/secure/view/.. "> 
+                                             placeholder="/secure/view/.. "
+                                             onkeyup="this.value=this.value.toLowerCase()"> 
                                 </p:inputText>
                                 <p:message for="urlvista" display="tooltip"/>
                             </p:column>
@@ -60,13 +62,13 @@
                                 <p:outputLabel value="Menú"/>
                             </p:column>
                             <p:column>
-                                <h:selectOneMenu id="menu"                                                   
+                                <p:selectOneMenu id="menu"                                                   
                                                  converter="hashConverter"
                                                  value="#{permisoBean.permiso.idMenu}" 
                                                  required="true">
                                     <f:selectItem noSelectionOption="true" itemLabel="Seleccionar" itemValue="#{null}"/>                                    
                                     <f:selectItems value="#{permisoBean.menus}"/>
-                                </h:selectOneMenu>
+                                </p:selectOneMenu>
                                 <p:message for="menu" display="tooltip"/>
                             </p:column>
                         </p:row>

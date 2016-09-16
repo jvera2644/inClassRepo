@@ -43,4 +43,15 @@ public class BarrioFacade  extends AbstractFacade<Barrio>{
         }
         //return null;
     }
+    
+     public List<Barrio> findBarriosPorCiudad(Integer idCiudad){
+        try {
+            Query query = em.createQuery("select u from Barrio u where u.idCiudad.idCiudad = :idCiudad");
+            query.setParameter("idCiudad", idCiudad);
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener los barrios para la ciudad " + idCiudad, e);
+        }
+        return null;
+    }
 }

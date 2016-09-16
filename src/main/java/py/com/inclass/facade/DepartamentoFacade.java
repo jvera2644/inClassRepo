@@ -43,4 +43,15 @@ public class DepartamentoFacade  extends AbstractFacade<Departamento>{
         }
         return null;
     }
+    
+    public List<Departamento> getDepartamentosPorPais(Integer idPais){
+        try {
+            Query query = em.createQuery("select u from Departamento u where u.idPais.idPais = :idPais");
+            query.setParameter("idPais", idPais);
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener los departamentos del país " + idPais, e);
+        }
+        return null;
+    }
 }

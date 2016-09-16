@@ -32,7 +32,8 @@
                                            value="#{tipoDocumentoBean.tipoDocumento.descripcion}"
                                            required="true" 
                                            size="30" 
-                                           maxlength="45"> 
+                                           maxlength="45"
+                                           onkeyup="this.value=this.value.toUpperCase()"> 
                                 </p:inputText>
                                 <p:message for="descripcion" display="tooltip"/>
                           </p:column>

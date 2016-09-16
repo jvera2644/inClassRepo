@@ -85,6 +85,10 @@ public class Persona implements Serializable {
     @Size(min = 1, max = 1)
     @Column(name = "sexo")
     private String sexo;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "estado")
+    private int estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona", fetch = FetchType.LAZY)
     private Collection<Usuario> usuarioCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPersona", fetch = FetchType.LAZY)
@@ -303,5 +307,14 @@ public class Persona implements Serializable {
     public String toString() {
         return "py.com.inclass.entities.Persona[ idPersona=" + idPersona + " ]";
     }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
+    
     
 }

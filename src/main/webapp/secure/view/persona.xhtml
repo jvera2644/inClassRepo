@@ -1,0 +1,372 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- Importamos el template -->
+    <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                    template="./../../template/template.xhtml">
+        
+        <ui:define name="title">#{bBase['persona.title']}</ui:define>
+        
+        <ui:define name="content">
+            
+            <!-- popup -->
+            <p:dialog modal="true" showEffect="explode" 
+                      widgetVar="dialogo" header="Persona"
+                      hideEffect="bounce" styleClass="sin-borde"
+                      closeOnEscape="true">
+                
+                <!-- formulario alta/edición -->
+                <h:form id="form_new_edit">
+                    <p:panelGrid id="panelGrid">
+                        
+                        <p:row>
+                          <p:column>
+                                <p:outputLabel value="Nombres"/>
+                          </p:column>
+                          <p:column>
+                              <p:inputText id="nombres" 
+                                           value="#{personaBean.persona.nombre}"
+                                           required="true" 
+                                           size="30" 
+                                           maxlength="45"
+                                           onkeyup="this.value=this.value.toUpperCase()"> 
+                                </p:inputText>
+                                <p:message for="nombres" display="tooltip"/>
+                          </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Apellidos"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="apellidos" 
+                                             value="#{personaBean.persona.apellido}"
+                                             required="true" 
+                                             size="30" 
+                                             maxlength="45"
+                                             onkeyup="this.value=this.value.toUpperCase()"> 
+                                </p:inputText>
+                                <p:message for="apellidos" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Tipo Documento"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="tipo_documento" 
+                                                 converter="hashConverter"
+                                                 value="#{personaBean.persona.idTipoDocumento}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONAR" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{personaBean.tiposDocumentos}"/>
+                                </p:selectOneMenu>
+                                <p:message for="tipo_documento" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Nro. Documento"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="nro_documento" 
+                                             value="#{personaBean.persona.numeroDocumento}"
+                                             required="true" 
+                                             size="12" 
+                                             maxlength="30"> 
+                                </p:inputText>
+                                <p:message for="nro_documento" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Fecha Nacimiento"/>
+                            </p:column>
+                            <p:column>
+                                <p:calendar id="fecha_nacimiento" 
+                                            value="#{personaBean.persona.fechaNacimiento}" 
+                                            navigator="true" 
+                                            pattern="dd-MM-yyyy" 
+                                            yearRange="1900:c"
+                                            required="true" 
+                                            locale="es"/>
+                                <p:message for="fecha_nacimiento" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Género"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneButton id="genero" 
+                                                   value="#{personaBean.persona.sexo}"
+                                                   required="true">
+                                    <f:selectItem itemLabel="Masculino" itemValue="M"/>
+                                    <f:selectItem itemLabel="Femenino" itemValue="F"/>
+                                </p:selectOneButton>
+                                <p:message for="genero" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="País"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="persona" 
+                                                 converter="hashConverter"
+                                                 value="#{personaBean.paisSeleccionado}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONAR" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{personaBean.paises}"/>
+                                    <p:ajax listener="#{personaBean.onChangePais}" update="departamento" />
+                                </p:selectOneMenu>
+                                <p:message for="persona" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Departamento"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="departamento" 
+                                                 converter="hashConverter"
+                                                 value="#{personaBean.departamentoSeleccionado}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONAR" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{personaBean.departamentos}"/>
+                                    <p:ajax listener="#{personaBean.onChangeDepartamento}" update="ciudad" />
+                                </p:selectOneMenu>
+                                <p:message for="departamento" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Ciudad"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="ciudad" 
+                                                 converter="hashConverter"
+                                                 value="#{personaBean.ciudadSeleccionado}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONAR" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{personaBean.ciudades}"/>
+                                    <p:ajax listener="#{personaBean.onChangeCiudad}" update="barrio" />
+                                </p:selectOneMenu>
+                                <p:message for="ciudad" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Barrio"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="barrio" 
+                                                 converter="hashConverter"
+                                                 value="#{personaBean.persona.idBarrio}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONAR" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{personaBean.barrios}"/>
+                                </p:selectOneMenu>
+                                <p:message for="barrio" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+
+
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Dirección"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputTextarea id="direccion" 
+                                                 rows="3" cols="30" 
+                                                 required="true" 
+                                                 validatorMessage="máximo 45 caracteres"
+                                                 value="#{personaBean.persona.direccion}" 
+                                                 onkeyup="this.value=this.value.toUpperCase()">
+                                    <f:validateLength maximum="45"/>
+                                </p:inputTextarea>
+                                <p:message for="direccion" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Teléfono"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="telefono" 
+                                             value="#{personaBean.persona.telefono}"
+                                             required="true" 
+                                             size="15" 
+                                             maxlength="20"
+                                             placeholder="021.."> 
+                                </p:inputText>
+                                <p:message for="telefono" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Móvil"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputMask id="movil" 
+                                             value="#{personaBean.persona.celular}"
+                                             mask="0999-999-999"
+                                             required="true"/>
+                                <p:message for="movil" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="E-mail"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputText id="email" 
+                                             size="45"
+                                             maxlength="45"
+                                             required="true"
+                                             validatorMessage="E-mail incorrecto"
+                                             value="#{personaBean.persona.correo}">
+                                    <f:validateRegex
+                                        pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                                </p:inputText>
+                                <p:message for="email" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Nacionalidad"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="nacionalidad" 
+                                                 converter="hashConverter"
+                                                 value="#{personaBean.persona.idNacionalidad}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="SELECCIONAR" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{personaBean.nacionalidades}"/>
+                                </p:selectOneMenu>
+                                <p:message for="nacionalidad" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                                                
+                        <p:row>
+                            <p:column>
+                            <!-- boton guardar -->
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" 
+                                             actionListener="#{personaBean.guardar}"
+                                             oncomplete="if(!args.validationFailed) PF('dialogo').hide()"
+                                             update="form_new_edit:panelGrid :form_list"
+                                             styleClass="boton"/>
+
+                            <!-- boton cancelar -->
+                            <p:commandButton value="Cancelar" icon="ui-icon-close" 
+                                             onclick="dialogo.hide()"
+                                             immediate="true" process="@this"
+                                             update="form_new_edit"
+                                             styleClass="boton"/>
+                            </p:column>
+                        </p:row>                                               
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+            
+            <!-- formulario listado -->
+            <h:form id="form_list">
+                <h1>Listado de Personas</h1><br/>
+                <p:growl id="msg" globalOnly="true"/>
+                
+                <p:dataTable value="#{personaBean.personas}" var="persona" 
+                             paginator="true" rows="5" 
+                             emptyMessage="No existen registros" widgetVar="lista"
+                             id="idTableRow"
+                             styleClass="table_new">
+                    
+                    <f:facet name="header">
+                        
+                        <!-- boton nuevo -->
+                        <p:commandButton value="Nuevo" icon="ui-icon-plus" 
+                                         styleClass="boton" 
+                                         actionListener="#{personaBean.nuevo}"
+                                         update=":form_new_edit:panelGrid"/>
+                        
+                        <!-- buscador en la tabla -->
+                        <p:outputPanel style="text-align: right">
+                            <h:outputText value="Buscar: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" placeholder="Buscar .."/>
+                        </p:outputPanel>
+                        
+                    </f:facet>
+                    
+                    <!-- columnas de la tabla -->
+                    <p:column headerText="Id" sortBy="#{persona.idPersona}" filterBy="#{persona.idPersona}" filterMatchMode="contains">
+                        <h:outputText value="#{persona.idPersona}"/>
+                    </p:column>
+                    <p:column headerText="Nro. Documento" sortBy="#{persona.numeroDocumento}" filterBy="#{persona.numeroDocumento}" filterMatchMode="contains">
+                        <h:outputText value="#{persona.numeroDocumento}"/>
+                    </p:column>
+                    <p:column headerText="Nombres" sortBy="#{persona.nombre}" filterBy="#{persona.nombre}" filterMatchMode="contains">
+                        <h:outputText value="#{persona.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Apellidos" sortBy="#{persona.apellido}" filterBy="#{persona.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{persona.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Estado" sortBy="#{persona.estado}">
+                        <h:panelGroup rendered="#{persona.estado eq 1}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_activo.gif" width="12" height="13" />
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{persona.estado eq 0}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_desactivo.gif" width="14" height="15" />
+                        </h:panelGroup>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Acciones
+                        </f:facet>  
+                        <p:commandLink action="#{personaBean.editar}" 
+                                       title="Editar" 
+                                       update=":form_new_edit:panelGrid">
+                            <p:graphicImage value="../../resources/images/detalles.png"/>
+                            <f:setPropertyActionListener value="#{persona}" target="#{personaBean.persona}"/>
+                            <f:setPropertyActionListener target="#{personaBean.modificar}" value="#{true}"/>
+                        </p:commandLink>
+                        <p:commandLink title="Eliminar" onclick="PF('confirmacion').show()">
+                            <p:graphicImage value="../../resources/images/anular.png"/>
+                            <f:setPropertyActionListener value="#{persona}" target="#{personaBean.persona}"/>
+                        </p:commandLink>
+                    </p:column>
+                    
+                </p:dataTable>
+            </h:form>
+            
+            <p:confirmDialog widgetVar="confirmacion" header="Confirmación" message="Está seguro que desea eliminar?">
+                <h:form>
+                    <p:commandButton value="Sí" action="#{personaBean.eliminar}" 
+                                     styleClass="ui-confirmdialog-yes" 
+                                     icon="ui-icon-check" update=":form_list"
+                                     oncomplete="PF('confirmacion').hide()"/>
+                    <p:commandButton value="No" type="button" onclick="PF('confirmacion').hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </h:form>    
+            </p:confirmDialog>
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

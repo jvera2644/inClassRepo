@@ -39,7 +39,8 @@
                           <p:column>
                                 <p:inputText id="descripcion" 
                                              value="#{rolBean.rol.descripcion}"
-                                             required="true">
+                                             required="true"
+                                             onkeyup="this.value=this.value.toUpperCase()">
                                 </p:inputText>
                                 <p:message for="descripcion" display="tooltip"/>
                           </p:column>  

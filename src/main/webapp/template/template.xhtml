@@ -3,7 +3,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 
     <h:head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
@@ -71,9 +72,16 @@
     </h:head>
 
     <h:body>
+        
+        <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
+            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/loading.gif" />
+        </p:dialog>
+        
         <div id="top" class="top">
-            <ui:insert name="top">
+            <ui:insert name="top">             
+                
                 <h:form>
                     <!--h:graphicImage value="../resources/images/banner.jpg"/-->
                     <!--p:outputLabel style="font-size: 24pt; font-weight: bold;color: black; position: absolute; top: 45px;left:350px;" value="Servicio Médico de la Cooperativa Ypacaraí Ltda."/-->
