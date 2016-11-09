@@ -33,7 +33,7 @@ public class PersonaConverter implements Converter {
         
         try{
             if (value != null && !value.trim().equals("")) {
-                List<Persona> personas = personaFacade.findByNroDocumentoOnComplete(value);
+                List<Persona> personas = personaFacade.findByNombresApellidos(value);
                 return personas != null && !personas.isEmpty() ? personas.get(0) : null;
         } else {
             return null;

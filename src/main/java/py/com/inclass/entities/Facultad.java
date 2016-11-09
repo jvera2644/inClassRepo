@@ -45,6 +45,7 @@ public class Facultad implements Serializable {
     private int estado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idFacultad", fetch = FetchType.LAZY)
     private Collection<Carrera> carreraCollection;
+    
 
     public Facultad() {
     }

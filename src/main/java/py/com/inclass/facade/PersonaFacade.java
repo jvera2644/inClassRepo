@@ -79,4 +79,15 @@ public class PersonaFacade extends AbstractFacade<Persona>{
             return null;
         }
     }
+    
+    public List<Persona> findByNombresApellidos(String nombreApellidoPersona){
+         try {
+            Query query = em.createQuery("select u from Persona u where u.nombre like :nombreApellidoPersona or u.apellido like :nombreApellidoPersona");
+            query.setParameter("nombreApellidoPersona", "%" + nombreApellidoPersona + "%");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener personas con nombres y/o apellidos " + nombreApellidoPersona, e);
+            return null;
+        }
+    }
 }

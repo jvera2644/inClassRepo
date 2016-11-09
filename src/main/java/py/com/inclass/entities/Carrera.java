@@ -45,6 +45,8 @@ public class Carrera implements Serializable {
     @JoinColumn(name = "id_facultad", referencedColumnName = "id_facultad")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Facultad idFacultad;
+    @Column(name = "estado")
+    private int estado;
     @ManyToMany(cascade = CascadeType.MERGE)
     @JoinTable(name = "unidb.carrera_semestre", joinColumns = {
         @JoinColumn(name = "id_carrera", referencedColumnName = "id_carrera")
@@ -122,6 +124,13 @@ public class Carrera implements Serializable {
     public void setSemestreCollection(Collection<Semestre> semestreCollection) {
         this.semestreCollection = semestreCollection;
     }
-      
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
     
 }

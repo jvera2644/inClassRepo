@@ -7,7 +7,6 @@ package py.com.inclass.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,8 +19,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -48,16 +45,18 @@ public class Turno implements Serializable {
     private String descripcion;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 5)
     @Column(name = "hora_inicio")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date horaInicio;
+    private String horaInicio;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 5)
     @Column(name = "hora_fin")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date horaFin;
+    private String horaFin;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTurno", fetch = FetchType.LAZY)
     private Collection<Horario> horarioCollection;
+    @Column(name = "estado")
+    private int estado;
 
     public Turno() {
     }
@@ -66,7 +65,7 @@ public class Turno implements Serializable {
         this.idTurno = idTurno;
     }
 
-    public Turno(Integer idTurno, String descripcion, Date horaInicio, Date horaFin) {
+    public Turno(Integer idTurno, String descripcion, String horaInicio, String horaFin) {
         this.idTurno = idTurno;
         this.descripcion = descripcion;
         this.horaInicio = horaInicio;
@@ -89,19 +88,19 @@ public class Turno implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Date getHoraInicio() {
+    public String getHoraInicio() {
         return horaInicio;
     }
 
-    public void setHoraInicio(Date horaInicio) {
+    public void setHoraInicio(String horaInicio) {
         this.horaInicio = horaInicio;
     }
 
-    public Date getHoraFin() {
+    public String getHoraFin() {
         return horaFin;
     }
 
-    public void setHoraFin(Date horaFin) {
+    public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
     }
 
@@ -136,6 +135,14 @@ public class Turno implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.Turno[ idTurno=" + idTurno + " ]";
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
     
 }
