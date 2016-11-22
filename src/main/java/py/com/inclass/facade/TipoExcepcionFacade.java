@@ -12,24 +12,34 @@ public class TipoExcepcionFacade  extends AbstractFacade<TipoExcepcion>{
     
     @PersistenceContext(unitName = "INCLASSPU")
     private EntityManager em;
-    
-    public TipoExcepcionFacade(){
+
+    public TipoExcepcionFacade() {
         super(TipoExcepcion.class);
     }
-    
+
     @Override
-    protected EntityManager getEntityManager(){
+    protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     //TipoExcepcion
-    public List<TipoExcepcion> getAll(){
-        try{
-            Query query = em.createQuery("select u from TipoExcepcion u order by u.idTTipoExcepcion asc");
+    public List<TipoExcepcion> getAll() {
+        try {
+            Query query = em.createQuery("select u from TipoExcepcion u order by u.idTipoExcepcion asc");
             return query.getResultList();
-        }catch(Exception e){
-            logger.error("Error al obtener los Tipos de Excepcion.", e);
+        } catch (Exception e) {
+            logger.error("Error al obtener los tipos de excepciones.", e);
         }
-    return null;
-   }
+        return null;
+    }
+    
+     public List<TipoExcepcion> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from TipoExcepcion u where u.estado = 1 order by u.idTipoExcepcion asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener los tipos de excepciones activos.", e);
+        }
+        return null;
+    }
 }

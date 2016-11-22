@@ -41,6 +41,10 @@ public class MotivoJustificativo implements Serializable {
     private String descripcion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMotivo", fetch = FetchType.LAZY)
     private Collection<Justificativo> justificativoCollection;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "estado")
+    private int estado;
 
     public MotivoJustificativo() {
     }
@@ -49,9 +53,10 @@ public class MotivoJustificativo implements Serializable {
         this.idMotivo = idMotivo;
     }
 
-    public MotivoJustificativo(Integer idMotivo, String descripcion) {
+    public MotivoJustificativo(Integer idMotivo, String descripcion, Integer estado) {
         this.idMotivo = idMotivo;
         this.descripcion = descripcion;
+        this.estado = estado;
     }
 
     public Integer getIdMotivo() {
@@ -101,6 +106,14 @@ public class MotivoJustificativo implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.MotivoJustificativo[ idMotivo=" + idMotivo + " ]";
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
     
 }

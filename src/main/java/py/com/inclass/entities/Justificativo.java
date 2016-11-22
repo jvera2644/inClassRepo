@@ -15,7 +15,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -52,7 +51,7 @@ public class Justificativo implements Serializable {
     private int estado;
     @Basic(optional = false)
     @NotNull
-    @Lob
+    //@Lob
     @Column(name = "documento")
     private byte[] documento;
     @JoinColumn(name = "id_persona", referencedColumnName = "id_persona")
@@ -61,6 +60,15 @@ public class Justificativo implements Serializable {
     @JoinColumn(name = "id_motivo", referencedColumnName = "id_motivo")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private MotivoJustificativo idMotivo;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "nombre_documento")
+    private String nombreDocumento;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "extension_documento")
+    private String extensionDocumento;
+    
 
     public Justificativo() {
     }
@@ -156,6 +164,22 @@ public class Justificativo implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.Justificativo[ idJustificativo=" + idJustificativo + " ]";
+    }
+
+    public String getNombreDocumento() {
+        return nombreDocumento;
+    }
+
+    public void setNombreDocumento(String nombreDocumento) {
+        this.nombreDocumento = nombreDocumento;
+    }
+
+    public String getExtensionDocumento() {
+        return extensionDocumento;
+    }
+
+    public void setExtensionDocumento(String extensionDocumento) {
+        this.extensionDocumento = extensionDocumento;
     }
     
 }

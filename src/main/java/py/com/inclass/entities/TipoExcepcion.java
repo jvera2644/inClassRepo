@@ -41,10 +41,12 @@ public class TipoExcepcion implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "descripion")
-    private String descripion;
+    @Column(name = "descripcion")
+    private String descripcion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idTipoExcepcion", fetch = FetchType.LAZY)
     private Collection<Excepcion> excepcionCollection;
+    @Column(name = "estado")
+    private int estado;
 
     public TipoExcepcion() {
     }
@@ -53,9 +55,9 @@ public class TipoExcepcion implements Serializable {
         this.idTipoExcepcion = idTipoExcepcion;
     }
 
-    public TipoExcepcion(Integer idTipoExcepcion, String descripion) {
+    public TipoExcepcion(Integer idTipoExcepcion, String descripcion) {
         this.idTipoExcepcion = idTipoExcepcion;
-        this.descripion = descripion;
+        this.descripcion = descripcion;
     }
 
     public Integer getIdTipoExcepcion() {
@@ -66,12 +68,12 @@ public class TipoExcepcion implements Serializable {
         this.idTipoExcepcion = idTipoExcepcion;
     }
 
-    public String getDescripion() {
-        return descripion;
+    public String getDescripcion() {
+        return descripcion;
     }
 
-    public void setDescripion(String descripion) {
-        this.descripion = descripion;
+    public void setDescripcion(String descripion) {
+        this.descripcion = descripion;
     }
 
     public Collection<Excepcion> getExcepcionCollection() {
@@ -105,6 +107,14 @@ public class TipoExcepcion implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.TipoExcepcion[ idTipoExcepcion=" + idTipoExcepcion + " ]";
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
     
 }

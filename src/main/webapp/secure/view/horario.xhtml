@@ -25,16 +25,16 @@
                         
                         <p:row>
                             <p:column>
-                                <p:outputLabel for="nroDocumento" value="Nro. Documento"/>
+                                <p:outputLabel value="Profesor"/>
                             </p:column>
                             <p:column>
-                                <p:inputText id="nroDocumento" 
-                                             value="#{horarioBean.nroDocumentoPersona}"
-                                             required="true"
-                                             disabled="#{horarioBean.modificar}">
-                                    <p:ajax event="change" listener="#{horarioBean.nroDocumentoOnChanged}" update="form_new_edit"/>
-                                </p:inputText><p:spacer width="15" height="15" />
-                                <h:outputText id="nomPer" value="#{horarioBean.nombreApellidoPersona}"></h:outputText>
+                                <p:selectOneMenu id="nroDocumento"                                                   
+                                                 converter="hashConverter"
+                                                 value="#{horarioBean.horario.idPersona}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{horarioBean.personas}"/>
+                                </p:selectOneMenu>
                                 <p:message for="nroDocumento" display="tooltip"/>
                             </p:column>
                         </p:row>
@@ -180,7 +180,7 @@
                     <p:column headerText="Id" sortBy="#{horario.idHorario}" filterBy="#{horario.idHorario}" filterMatchMode="contains">
                         <h:outputText value="#{horario.idHorario}"/>
                     </p:column>
-                    <p:column headerText="Alumno" sortBy="#{horario.idPersona.apellido}" filterBy="#{horario.idPersona.apellido}" filterMatchMode="contains">
+                    <p:column headerText="Profesor" sortBy="#{horario.idPersona.apellido}" filterBy="#{horario.idPersona.apellido}" filterMatchMode="contains">
                         <h:outputText value="#{horario.idPersona.nombre} #{horario.idPersona.apellido}"/>
                     </p:column>
                     <p:column headerText="Materia" sortBy="#{horario.idMateria.descripcion}" filterBy="#{horario.idMateria.descripcion}" filterMatchMode="contains">
@@ -188,6 +188,15 @@
                     </p:column>
                     <p:column headerText="Turno" sortBy="#{horario.idTurno.descripcion}" filterBy="#{horario.idTurno.descripcion}" filterMatchMode="contains">
                         <h:outputText value="#{horario.idTurno.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Día" sortBy="#{horario.dia}" filterBy="#{horario.dia}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.dia}"/>
+                    </p:column>
+                    <p:column headerText="Inicio" sortBy="#{horario.horaInicio}" filterBy="#{horario.horaInicio}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.horaInicio}"/>
+                    </p:column>
+                    <p:column headerText="Finalización" sortBy="#{horario.horaFin}" filterBy="#{horario.horaFin}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.horaFin}"/>
                     </p:column>
                     <p:column headerText="Estado" sortBy="#{horario.estado}">
                         <h:panelGroup rendered="#{horario.estado eq 1}">

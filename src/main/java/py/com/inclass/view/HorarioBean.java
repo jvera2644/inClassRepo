@@ -58,10 +58,10 @@ public class HorarioBean extends BaseBean {
     private boolean modificar;
     private List<SelectItem> materias;
     private List<SelectItem> turnos;
+    private List<SelectItem> personas;
     private String nombreApellidoPersona;
     private String nroDocumentoPersona;
     private boolean habilitaBotonGuardar;
-    private Persona persona;
     private Turno turnoSeleccionado;
     
     @PostConstruct
@@ -73,8 +73,12 @@ public class HorarioBean extends BaseBean {
     private void inicializarListasSeleccion(){
         materias = new ArrayList<SelectItem>();
         turnos = new ArrayList<SelectItem>();
+        personas = new ArrayList<SelectItem>();
         cargarMateriasSeleccion();
         cargarTurnosSeleccion();
+        cargarPersonasSeleccion();
+        //prueba
+        //List<Persona> lista = personaFacade.getAllPersonasConRolProfesorActivos();
     }
     
     private void cargarMateriasSeleccion() {
@@ -105,14 +109,30 @@ public class HorarioBean extends BaseBean {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error al cargar lor turnos del sistema", e);
+            logger.error("Error al cargar los turnos del sistema", e);
+        }
+    }
+    
+    private void cargarPersonasSeleccion(){
+        personas = new ArrayList<SelectItem>();                      
+        try {
+            List<Persona> listaSource = personaFacade.getAllPersonasConRolProfesorActivos();
+            if (listaSource != null) {
+                if (!listaSource.isEmpty()) {
+                    for (Persona p : listaSource) {
+                        personas.add(new SelectItem(p, p.getApellido() + " " + p.getNombre()));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Error al cargar las personas con rol de profesor dentro sistema", e);
         }
     }
     
     
     public void guardar(){
         try{
-            horario.setIdPersona(persona);
+            //horario.setIdPersona(persona);
             if(!modificar){
                 //create
                 horario.setEstado(1);
@@ -146,7 +166,8 @@ public class HorarioBean extends BaseBean {
         try{
             nroDocumentoPersona = horario.getIdPersona().getNumeroDocumento();
             nombreApellidoPersona = horario.getIdPersona().getApellido() + ", " + horario.getIdPersona().getNombre();
-            persona = horario.getIdPersona(); 
+            //persona = horario.getIdPersona(); 
+            turnoSeleccionado = horario.getIdTurno();
         }catch(Exception e){
             setErrorMessage("Error al editar un horario de clase.");
             logger.error("Error al editar un horario de clase.", e);
@@ -172,23 +193,23 @@ public class HorarioBean extends BaseBean {
         context.execute(path);
     }
     
-    public void nroDocumentoOnChanged() {
-        habilitaBotonGuardar = false;
-        try{
-            //verificamos si el nro. de documento ingresado existe
-            persona = personaFacade.findByNroDocumento(nroDocumentoPersona);
-            if(persona != null){
-                setNombreApellidoPersona(persona.getNombre() + ", " + persona.getApellido());
-            }else{
-                setNombreApellidoPersona("");
-                setWarnMessage(nroDocumentoPersona + " no está registrado.");
-                habilitaBotonGuardar = true;
-                }
-
-            }catch(Exception e){
-            logger.error("Error al buscar persona por nro. de documento", e);
-        }
-    }
+//    public void nroDocumentoOnChanged() {
+//        habilitaBotonGuardar = false;
+//        try{
+//            //verificamos si el nro. de documento ingresado existe
+//            persona = personaFacade.findByNroDocumento(nroDocumentoPersona);
+//            if(persona != null){
+//                setNombreApellidoPersona(persona.getNombre() + ", " + persona.getApellido());
+//            }else{
+//                setNombreApellidoPersona("");
+//                setWarnMessage(nroDocumentoPersona + " no está registrado.");
+//                habilitaBotonGuardar = true;
+//                }
+//
+//            }catch(Exception e){
+//            logger.error("Error al buscar persona por nro. de documento", e);
+//        }
+//    }
     
     public void turnoChange(){
         turnoSeleccionado = horario.getIdTurno();
@@ -279,6 +300,14 @@ public class HorarioBean extends BaseBean {
 
     public void setHabilitaBotonGuardar(boolean habilitaBotonGuardar) {
         this.habilitaBotonGuardar = habilitaBotonGuardar;
+    }
+
+    public List<SelectItem> getPersonas() {
+        return personas;
+    }
+
+    public void setPersonas(List<SelectItem> personas) {
+        this.personas = personas;
     }
        
 }

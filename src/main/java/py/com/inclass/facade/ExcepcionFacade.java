@@ -12,24 +12,34 @@ public class ExcepcionFacade  extends AbstractFacade<Excepcion>{
     
     @PersistenceContext(unitName = "INCLASSPU")
     private EntityManager em;
-    
-    public ExcepcionFacade(){
+
+    public ExcepcionFacade() {
         super(Excepcion.class);
     }
-    
+
     @Override
-    protected EntityManager getEntityManager(){
+    protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     //Excepcion
-    public List<Excepcion> getAll(){
-        try{
+    public List<Excepcion> getAll() {
+        try {
             Query query = em.createQuery("select u from Excepcion u order by u.idExcepcion asc");
             return query.getResultList();
-        }catch(Exception e){
-            logger.error("Error al obtener las Excepcion.", e);
+        } catch (Exception e) {
+            logger.error("Error al obtener las excepciones del sistema.", e);
         }
-    return null;
-   }
+        return null;
+    }
+    
+    public List<Excepcion> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from Excepcion u where u.estado = 1 order by u.idExcepcion asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener las excepciones activas del sistema.", e);
+        }
+        return null;
+    }
 }
