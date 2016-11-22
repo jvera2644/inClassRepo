@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- Importamos el template -->
+    <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                    template="./../../template/template.xhtml">
+        
+        <ui:define name="title">#{bBase['materia.title']}</ui:define>
+        
+        
+        <ui:define name="content">
+            
+            <!-- popup -->
+            <p:dialog modal="true" showEffect="explode" 
+                      widgetVar="dialogo" header="Materia"
+                      hideEffect="bounce" styleClass="sin-borde"
+                      closeOnEscape="true">
+                
+                <!-- formulario alta/edición -->
+                <h:form id="form_new_edit">
+                    <!--p:messages id="messages" showDetail="true" autoUpdate="true" closable="true" /-->
+                    <p:growl id="growl" sticky="false" life="5000"/>  
+                    <p:panelGrid id="panelGrid">
+                        
+                        
+                        <p:row>
+                          <p:column>
+                                <p:outputLabel for="descripcion" value="Descripción"/>
+                          </p:column>
+                          <p:column>
+                                <p:inputText id="descripcion" 
+                                             value="#{materiaBean.materia.descripcion}"
+                                             required="true"
+                                             size="30"
+                                             maxlength="45"
+                                             onkeyup="this.value=this.value.toUpperCase()">
+                                </p:inputText>
+                                <p:message for="descripcion" display="tooltip"/>
+                          </p:column>  
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <h:outputLabel value="Carreras Universitarias"/>
+                            </p:column>
+                            <p:column>
+                                <p:pickList label="Pick" id="pickList" value="#{materiaBean.carreras}" var="carrera"   
+                                    itemLabel="#{carrera.descripcion}" itemValue="#{carrera}" converter="hashConverter">            
+                                </p:pickList>
+                                <p:message for="pickList" />
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                            <!-- boton guardar -->
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" 
+                                             actionListener="#{materiaBean.guardar}"
+                                             oncomplete="if(!args.validationFailed) PF('dialogo').hide()"
+                                             update="form_new_edit:panelGrid :form_list"
+                                             disabled="#{materiaBean.habilitaBotonGuardar}"
+                                             styleClass="boton"/>
+
+                            <!-- boton cancelar -->
+                            <p:commandButton value="Cancelar" icon="ui-icon-close" 
+                                             onclick="dialogo.hide()"
+                                             immediate="true" process="@this"
+                                             update="form_new_edit"
+                                             styleClass="boton"/>
+                            </p:column>
+                        </p:row>                                               
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+            
+            <!-- formulario listado -->
+            <h:form id="form_list">
+                <h1>Listado de Materias</h1><br/>
+                <p:growl id="msg" globalOnly="true"/>
+                
+                <p:dataTable value="#{materiaBean.materias}" var="materia" 
+                             paginator="true" rows="10" filteredValue="#{materiaBean.materiasFiltrados}"
+                             emptyMessage="No existen registros" widgetVar="lista"
+                             id="idTableRow"
+                             styleClass="table_new">
+                    
+                    <f:facet name="header">
+                        
+                        <!-- boton nuevo -->
+                        <p:commandButton value="Nuevo" icon="ui-icon-plus" 
+                                         styleClass="boton" 
+                                         actionListener="#{materiaBean.nuevo}"
+                                         update=":form_new_edit:panelGrid"/>
+                        
+                        <!-- buscador en la tabla -->
+                        <p:outputPanel style="text-align: right">
+                            <h:outputText value="Buscar: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" placeholder="Buscar .."/>
+                        </p:outputPanel>
+                        
+                    </f:facet>
+                    
+                    <!-- columnas de la tabla -->
+                    <p:column headerText="Id Materia" sortBy="#{materia.idMateria}" filterBy="#{materia.idMateria}" filterMatchMode="contains">
+                        <h:outputText value="#{materia.idMateria}"/>
+                    </p:column>
+                    <p:column headerText="Descripción" sortBy="#{materia.descripcion}" filterBy="#{materia.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{materia.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Estado" sortBy="#{materia.estado}" filterBy="#{materia.estado}" filterMatchMode="contains">
+                        <h:panelGroup rendered="#{materia.estado eq 1}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_activo.gif" width="12" height="13" />
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{materia.estado eq 0}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_desactivo.gif" width="14" height="15" />
+                        </h:panelGroup>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Acciones
+                        </f:facet>  
+                        <p:commandLink action="#{materiaBean.editar}" 
+                                       title="Editar" 
+                                       update=":form_new_edit:panelGrid"
+                                       onclick="PF('dialogo').show()">
+                            <p:graphicImage value="../../resources/images/detalles.png"/>
+                            <f:setPropertyActionListener value="#{materia}" target="#{materiaBean.materia}"/>
+                            <f:setPropertyActionListener target="#{materiaBean.modificar}" value="#{true}"/>
+                        </p:commandLink>
+                            <p:commandLink title="Eliminar" onclick="PF('confirmacion').show()">
+                            <p:graphicImage value="../../resources/images/anular.png"/>
+                            <f:setPropertyActionListener value="#{materia}" target="#{materiaBean.materia}"/>
+                        </p:commandLink>
+                    </p:column>
+                    
+                </p:dataTable>
+            </h:form>
+            
+            <p:confirmDialog widgetVar="confirmacion" header="Confirmación" message="Está seguro que desea eliminar?">
+                <h:form>
+                    <p:commandButton value="Aceptar" action="#{materiaBean.eliminar}" 
+                                     styleClass="ui-confirmdialog-yes" 
+                                     icon="ui-icon-check" update=":form_list"
+                                     oncomplete="PF('confirmacion').hide()"/>
+                    <p:commandButton value="Cancelar" type="button" onclick="PF('confirmacion').hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </h:form>    
+            </p:confirmDialog>
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

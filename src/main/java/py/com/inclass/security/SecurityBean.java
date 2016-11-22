@@ -17,10 +17,13 @@ import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
 import py.com.inclass.entities.Menu;
+import py.com.inclass.entities.Parametro;
 import py.com.inclass.entities.Permiso;
+import py.com.inclass.entities.Persona;
 import py.com.inclass.entities.Rol;
 import py.com.inclass.entities.Usuario;
 import py.com.inclass.facade.MenuFacade;
+import py.com.inclass.facade.ParametroFacade;
 import py.com.inclass.facade.UsuarioFacade;
 import py.com.inclass.util.BaseBean;
 import py.com.inclass.util.ParametroEnum;
@@ -46,6 +49,9 @@ public class SecurityBean extends BaseBean {
     
     @EJB
     private UsuarioFacade usuarioFacade;
+    
+    @EJB
+    private ParametroFacade parametroFacade;
 
     private Usuario usuario;
     private boolean tienePermiso;
@@ -179,7 +185,8 @@ public class SecurityBean extends BaseBean {
             } else {
                 Usuario usuarioSinContraseña = usuarioFacade.getUsuarioPorNombreUsuario(userName);
                 if (usuarioSinContraseña != null){
-                    if (usuarioSinContraseña.getIntentoFallido() < ParametroEnum.PAR_CAN_INT_FAL.getValor()){
+                    Parametro p = parametroFacade.getParametroByCodigo(ParametroEnum.PAR_CAN_INT_FAL.getCodigo());
+                    if (usuarioSinContraseña.getIntentoFallido() < Integer.parseInt(p.getValor())){
                         usuarioSinContraseña.setIntentoFallido(usuarioSinContraseña.getIntentoFallido()+1);
                         usuarioFacade.edit(usuarioSinContraseña);
                         setWarnMessage("Credenciales incorrectas");
@@ -324,6 +331,5 @@ public class SecurityBean extends BaseBean {
     public void setNuevoPasswordConfirmacion(String nuevoPasswordConfirmacion) {
         this.nuevoPasswordConfirmacion = nuevoPasswordConfirmacion;
     }
-    
-    
+ 
 }

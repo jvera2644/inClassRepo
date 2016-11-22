@@ -33,6 +33,15 @@ public class ParametroFacade  extends AbstractFacade<Parametro>{
         }
     }
     
-    
+    public Parametro getParametroByCodigo(String codigo){
+        try {
+            Query query = em.createQuery("select u from Parametro u where upper(u.codigo) = upper(:codigo) ");
+            query.setParameter("codigo", codigo);
+            return (Parametro) query.getSingleResult();
+        } catch (Exception e) {
+            logger.error("Error al obtener el parámetro "+ codigo +" del sistema.", e);
+            throw new RuntimeException("Error al obtener el parámetro "+ codigo +" del sistema.", e);
+        }
+    }
     
 }

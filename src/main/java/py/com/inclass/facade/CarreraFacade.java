@@ -12,24 +12,34 @@ public class CarreraFacade  extends AbstractFacade<Carrera>{
     
     @PersistenceContext(unitName = "INCLASSPU")
     private EntityManager em;
-    
-    public CarreraFacade(){
+
+    public CarreraFacade() {
         super(Carrera.class);
     }
-    
+
     @Override
-    protected EntityManager getEntityManager(){
+    protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     //Carrera
-    public List<Carrera> getAll(){
-        try{
+    public List<Carrera> getAll() {
+        try {
             Query query = em.createQuery("select u from Carrera u order by u.idCarrera asc");
             return query.getResultList();
-        }catch(Exception e){
-            logger.error("Error al obtener las Carreras.", e);
+        } catch (Exception e) {
+            logger.error("Error al obtener todas las carreras.", e);
         }
-    return null;
-   }
+        return null;
+    }
+
+    public List<Carrera> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from Carrera u where u.estado = 1 order by u.idCarrera asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener las carreras activas.", e);
+        }
+        return null;
+    }
 }

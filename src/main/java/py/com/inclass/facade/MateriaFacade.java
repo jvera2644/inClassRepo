@@ -12,24 +12,34 @@ public class MateriaFacade  extends AbstractFacade<Materia>{
     
     @PersistenceContext(unitName = "INCLASSPU")
     private EntityManager em;
-    
-    public MateriaFacade(){
+
+    public MateriaFacade() {
         super(Materia.class);
     }
-    
+
     @Override
-    protected EntityManager getEntityManager(){
+    protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     //Materia
-    public List<Materia> getAll(){
-        try{
+    public List<Materia> getAll() {
+        try {
             Query query = em.createQuery("select u from Materia u order by u.idMateria asc");
             return query.getResultList();
-        }catch(Exception e){
-            logger.error("Error al obtener las Materias.", e);
+        } catch (Exception e) {
+            logger.error("Error al obtener las materias.", e);
         }
-    return null;
-   }
+        return null;
+    }
+
+    public List<Materia> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from Materia u where u.estado = 1 order by u.idMateria asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener las materias activas.", e);
+        }
+        return null;
+    }
 }

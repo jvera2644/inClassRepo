@@ -52,6 +52,8 @@ public class Materia implements Serializable {
     private Collection<Carrera> carreraCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMateria", fetch = FetchType.LAZY)
     private Collection<Horario> horarioCollection;
+    @Column(name = "estado")
+    private int estado;
 
     public Materia() {
     }
@@ -121,6 +123,13 @@ public class Materia implements Serializable {
     public void setCarreraCollection(Collection<Carrera> carreraCollection) {
         this.carreraCollection = carreraCollection;
     }
-       
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
+    }
     
 }
