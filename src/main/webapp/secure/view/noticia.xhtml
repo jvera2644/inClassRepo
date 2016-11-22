@@ -1,0 +1,257 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- Importamos el template -->
+    <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                    template="./../../template/template.xhtml">
+        
+        <ui:define name="title">#{bBase['noticia.title']}</ui:define>
+                
+        <ui:define name="content">
+            
+            <!-- popup -->
+            <p:dialog modal="true" showEffect="explode" 
+                      widgetVar="dialogo" header="Noticia"
+                      hideEffect="bounce" styleClass="sin-borde"
+                      closeOnEscape="true">
+                
+                <!-- formulario alta/edición -->
+                <h:form id="form_new_edit" enctype="multipart/form-data" prependId="true">
+                    <p:growl id="messages" showDetail="false" />
+                    <p:panelGrid id="panelGrid">
+                        
+                         <p:row>
+                          <p:column>
+                                <p:outputLabel value="Título"/>
+                          </p:column>
+                          <p:column>
+                              <p:inputText id="titulo" 
+                                           value="#{noticiaBean.noticia.titulo}"
+                                           required="true" 
+                                           size="30" 
+                                           maxlength="45"
+                                           onkeyup="this.value=this.value.toUpperCase()"> 
+                                </p:inputText>
+                                <p:message for="titulo" display="tooltip"/>
+                          </p:column>
+                        </p:row>        
+
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Fecha Vigencia (Desde)"/>
+                            </p:column>
+                            <p:column>
+                                <p:calendar id="fecha_desde" 
+                                            value="#{noticiaBean.noticia.fechaInicio}" 
+                                            navigator="true" 
+                                            pattern="dd-MM-yyyy" 
+                                            yearRange="1900:c"
+                                            required="true" 
+                                            locale="es"/>
+                                <p:message for="fecha_desde" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Fecha Vigencia (Hasta)"/>
+                            </p:column>
+                            <p:column>
+                                <p:calendar id="fecha_hasta" 
+                                            value="#{noticiaBean.noticia.fechaFin}" 
+                                            navigator="true" 
+                                            pattern="dd-MM-yyyy" 
+                                            yearRange="1900:c"
+                                            required="true" 
+                                            locale="es"/>
+                                <p:message for="fecha_hasta" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                          <p:column>
+                                <p:outputLabel value="Contenido"/>
+                          </p:column>
+                          <p:column>
+                              <p:editor id="editor" widgetVar="editorWidget" value="#{noticiaBean.noticia.cuerpo}" width="450" height="100" />
+                              <p:commandButton value="Borrar" type="button" onclick="PF('editorWidget').clear();" icon="ui-icon-close" />
+                              <p:message for="editor" display="tooltip"/>
+                          </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Adjunto"/>
+                            </p:column>
+                            <p:column>
+                                <p:fileUpload id="imagen_documento"
+                                              fileUploadListener="#{noticiaBean.handleFileUpload}" 
+                                              mode="advanced"
+                                              dragDropSupport="true"
+                                              update="messages, panel_lista_documento"
+                                              label="Subir..."
+                                              auto="false"
+                                              sizeLimit="#{noticiaBean.tamanioMaxArchivo}" 
+                                              allowTypes="#{noticiaBean.tiposArchivosPermitidos}"
+                                              invalidSizeMessage="#{noticiaBean.msgTamanioNoPermitido}"
+                                              fileLimitMessage="#{noticiaBean.msgLimiteCantidad}"
+                                              invalidFileMessage="#{noticiaBean.msgFormatoNoPermitido}"
+                                              cancelLabel="#{noticiaBean.labelCancelar}"
+                                              uploadLabel="#{noticiaBean.labelAdjuntar}" >
+                                    <div id="lista_documento"  align= "center">										
+                                        <h:graphicImage name="images/upload.jpg"/>														
+                                        <H6>Puede arrastrar y soltar el archivo aquí para adjuntarlo</H6>																																															
+                                    </div>
+                                    <p:panel id="panel_lista_documento">			
+                                        <p:panelGrid  id="grid_lista_documento" 												
+                                                      rendered="#{noticiaBean.fileName ne null}">							    
+                                            <p:row>
+                                                <p:column>
+                                                    <h:outputText value="#{noticiaBean.fileName}" />
+                                                </p:column>
+                                                
+                                                <p:column style="width: 27px;"> 
+                                                    <p:commandButton style="border-bottom-color: red" 
+                                                                     value="Eliminar" 
+                                                                     actionListener="#{noticiaBean.eliminarArchivo}"
+                                                                     update="panel_lista_documento"
+                                                                     immediate="true"/>
+                                                </p:column>
+                                            </p:row>
+                                        </p:panelGrid>
+                                    </p:panel>
+                                </p:fileUpload>
+                                <p:message for="imagen_documento" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Publicar"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneRadio id="publicar" required="true" value="#{noticiaBean.noticia.publicado}">
+                                    <f:selectItem itemLabel="SI" itemValue="1" />
+                                    <f:selectItem itemLabel="NO" itemValue="0" />
+                                </p:selectOneRadio>
+                                <p:message for="publicar" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+
+                        <p:row>
+                            <p:column>
+                            <!-- boton guardar -->
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" 
+                                             actionListener="#{noticiaBean.guardar}"
+                                             oncomplete="if(!args.validationFailed) PF('dialogo').hide()"
+                                             update="form_new_edit:panelGrid :form_list"  
+                                             styleClass="boton"/>
+                            
+
+                            <!-- boton cancelar -->
+                            <p:commandButton value="Cancelar" icon="ui-icon-close" 
+                                             onclick="dialogo.hide()"
+                                             immediate="true" process="@this"
+                                             update="form_new_edit"
+                                             styleClass="boton"/>
+                            </p:column>
+                        </p:row>                                               
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+            
+            <!-- formulario listado -->
+            <h:form id="form_list">
+                <h1>Listado de Noticias</h1><br/>
+                <p:growl id="msg" globalOnly="true"/>
+                
+                <p:dataTable value="#{noticiaBean.noticias}" var="noticia" 
+                             paginator="true" rows="5" 
+                             emptyMessage="No existen registros" widgetVar="lista"
+                             id="idTableRow"
+                             styleClass="table_new">
+                    
+                    <f:facet name="header">
+                        
+                        <!-- boton nuevo -->
+                        <p:commandButton value="Nuevo" icon="ui-icon-plus" 
+                                         styleClass="boton" 
+                                         actionListener="#{noticiaBean.nuevo}"
+                                         update=":form_new_edit:panelGrid"/>
+                        
+                        <!-- buscador en la tabla -->
+                        <p:outputPanel style="text-align: right">
+                            <h:outputText value="Buscar: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" placeholder="Buscar .."/>
+                        </p:outputPanel>
+                        
+                    </f:facet>
+                    
+                    <!-- columnas de la tabla -->
+                    <p:column headerText="Id" sortBy="#{noticia.idNoticia}" filterBy="#{noticia.idNoticia}" filterMatchMode="contains">
+                        <h:outputText value="#{noticia.idNoticia}"/>
+                    </p:column>
+                    <p:column headerText="Usuario Carga" sortBy="#{noticia.idUsuario.usuario}" filterBy="#{noticia.idUsuario.usuario}" filterMatchMode="contains">
+                        <h:outputText value="#{noticia.idUsuario.usuario}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Inicio" sortBy="#{noticia.fechaInicio}" filterBy="#{noticia.fechaInicio}" filterMatchMode="contains">
+                        <h:outputText value="#{noticia.fechaInicio}">
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Fecha Finalización" sortBy="#{noticia.fechaFin}" filterBy="#{noticia.fechaFin}" filterMatchMode="contains">
+                        <h:outputText value="#{noticia.fechaFin}">
+                            <f:convertDateTime type="date" pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Título" sortBy="#{noticia.titulo}" filterBy="#{noticia.titulo}" filterMatchMode="contains">
+                        <h:outputText value="#{noticia.titulo}"/>
+                    </p:column>
+                    <p:column headerText="Estado" sortBy="#{noticia.estado}">
+                        <h:panelGroup rendered="#{noticia.estado eq 1}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_activo.gif" width="12" height="13" align="center" />
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{noticia.estado eq 0}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_desactivo.gif" width="14" height="15" align="center" />
+                        </h:panelGroup>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Acciones
+                        </f:facet>  
+                        <p:commandLink action="#{noticiaBean.editar}" 
+                                       title="Editar" 
+                                       update=":form_new_edit:panelGrid"
+                                       onclick="PF('dialogo').show()">
+                            <p:graphicImage value="../../resources/images/detalles.png"/>
+                            <f:setPropertyActionListener value="#{noticia}" target="#{noticiaBean.noticia}"/>
+                            <f:setPropertyActionListener target="#{noticiaBean.modificar}" value="#{true}"/>
+                        </p:commandLink>
+                        <p:commandLink title="Eliminar" onclick="PF('confirmacion').show()">
+                            <p:graphicImage value="../../resources/images/anular.png"/>
+                            <f:setPropertyActionListener value="#{noticia}" target="#{noticiaBean.noticia}"/>
+                        </p:commandLink>
+                    </p:column>
+                    
+                </p:dataTable>
+            </h:form>
+            
+            <p:confirmDialog widgetVar="confirmacion" header="Confirmación" message="Está seguro que desea eliminar?">
+                <h:form>
+                    <p:commandButton value="Sí" action="#{noticiaBean.eliminar}" 
+                                     styleClass="ui-confirmdialog-yes" 
+                                     icon="ui-icon-check" update=":form_list"
+                                     oncomplete="PF('confirmacion').hide()"/>
+                    <p:commandButton value="No" type="button" onclick="PF('confirmacion').hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </h:form>    
+            </p:confirmDialog>
+            
+        </ui:define>
+    </ui:composition>
+</html>
+
