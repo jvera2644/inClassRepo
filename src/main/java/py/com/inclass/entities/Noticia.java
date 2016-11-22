@@ -72,6 +72,12 @@ public class Noticia implements Serializable {
     @NotNull
     @Column(name = "publicado")
     private int publicado;
+    @Size(min = 1, max = 100)
+    @Column(name = "nombre_archivo")
+    private String nombreArchivo;
+    @Size(min = 1, max = 10)
+    @Column(name = "extension_archivo")
+    private String extensionArchivo;
 
     public Noticia() {
     }
@@ -185,6 +191,22 @@ public class Noticia implements Serializable {
 
     public void setPublicado(int publicado) {
         this.publicado = publicado;
+    }
+
+    public String getNombreArchivo() {
+        return nombreArchivo;
+    }
+
+    public void setNombreArchivo(String nombreArchivo) {
+        this.nombreArchivo = nombreArchivo;
+    }
+
+    public String getExtensionArchivo() {
+        return extensionArchivo;
+    }
+
+    public void setExtensionArchivo(String extensionArchivo) {
+        this.extensionArchivo = extensionArchivo;
     }
     
 }
