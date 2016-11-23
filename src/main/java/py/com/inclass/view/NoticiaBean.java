@@ -5,6 +5,8 @@
  */
 package py.com.inclass.view;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,6 +17,8 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import py.com.inclass.entities.Noticia;
 import py.com.inclass.entities.Usuario;
@@ -45,6 +49,7 @@ public class NoticiaBean extends BaseBean {
     private byte[] archivoNoticia;
     private String fileName;
     private String tipoContenido;
+    private StreamedContent archivoNoticiaDescarga;
     
     @PostConstruct
     public void init() {
@@ -134,6 +139,16 @@ public class NoticiaBean extends BaseBean {
         }
     }
     
+    public void handleFileDownload(){
+        try{
+            InputStream stream = new ByteArrayInputStream(archivoNoticia);
+            archivoNoticiaDescarga = new DefaultStreamedContent(stream, tipoContenido, fileName);
+        }catch(Exception e){
+            setErrorMessage("No se pudo descargar el archivo "+fileName);
+            logger.error("Error al descargar el archivo de justificación", e);
+        }
+    }
+    
     public void eliminarArchivo(){
         fileName = null;
         tipoContenido = null;
@@ -199,6 +214,14 @@ public class NoticiaBean extends BaseBean {
 
     public void setTipoContenido(String tipoContenido) {
         this.tipoContenido = tipoContenido;
+    }
+
+    public StreamedContent getArchivoNoticiaDescarga() {
+        return archivoNoticiaDescarga;
+    }
+
+    public void setArchivoNoticiaDescarga(StreamedContent archivoNoticiaDescarga) {
+        this.archivoNoticiaDescarga = archivoNoticiaDescarga;
     }
     
 }

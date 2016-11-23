@@ -10,6 +10,14 @@
                     template="./../../template/template.xhtml">
         
         <ui:define name="title">#{bBase['noticia.title']}</ui:define>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialog').show();
+            }
+            function stop() {
+                PF('statusDialog').hide();
+            }
+        </script>
                 
         <ui:define name="content">
             
@@ -115,12 +123,21 @@
                                                     <h:outputText value="#{noticiaBean.fileName}" />
                                                 </p:column>
                                                 
-                                                <p:column style="width: 27px;"> 
-                                                    <p:commandButton style="border-bottom-color: red" 
-                                                                     value="Eliminar" 
-                                                                     actionListener="#{noticiaBean.eliminarArchivo}"
-                                                                     update="panel_lista_documento"
-                                                                     immediate="true"/>
+                                                <p:column style="width: 170px;"> 
+                                                    <p:commandLink action="#{noticiaBean.eliminarArchivo}" 
+                                                                   title="Eliminar" 
+                                                                   update="panel_lista_documento"
+                                                                   immediate="true">
+                                                        <p:graphicImage value="../../resources/images/cross.png"/>
+                                                    </p:commandLink>
+                                                    &nbsp;
+                                                    <p:commandButton value="Descargar" 
+                                                                     ajax="false"
+                                                                     actionListener="#{noticiaBean.handleFileDownload}"
+                                                                     onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                                                     icon="ui-icon-arrowthick-1-s">
+                                                        <p:fileDownload value="#{noticiaBean.archivoNoticiaDescarga}" />
+                                                    </p:commandButton>
                                                 </p:column>
                                             </p:row>
                                         </p:panelGrid>
@@ -250,6 +267,10 @@
                     <p:commandButton value="No" type="button" onclick="PF('confirmacion').hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
                 </h:form>    
             </p:confirmDialog>
+            
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+                <p:graphicImage name="images/loading.gif" />
+            </p:dialog>
             
         </ui:define>
     </ui:composition>

@@ -5,6 +5,8 @@
  */
 package py.com.inclass.view;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -13,9 +15,12 @@ import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import javax.faces.model.SelectItem;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import py.com.inclass.entities.Justificativo;
 import py.com.inclass.entities.MotivoJustificativo;
@@ -51,13 +56,13 @@ public class JustificativoBean extends BaseBean {
     private byte[] archivoJustificativo;
     private String fileName;
     private String tipoContenido;
+    private StreamedContent archivoJustificativoDescarga;
     
     @PostConstruct
     public void init() {
         inicializarMenu();
         inicializarListasSeleccion();
     }
-    
     
     public void guardar(){
         try{
@@ -164,6 +169,16 @@ public class JustificativoBean extends BaseBean {
         }
     }
     
+    public void handleFileDownload(){
+        try{
+            InputStream stream = new ByteArrayInputStream(archivoJustificativo);
+            archivoJustificativoDescarga = new DefaultStreamedContent(stream, tipoContenido, fileName);
+        }catch(Exception e){
+            setErrorMessage("No se pudo descargar el archivo "+fileName);
+            logger.error("Error al descargar el archivo de justificación", e);
+        }
+    }
+    
     public void eliminarArchivo(){
         fileName = null;
         tipoContenido = null;
@@ -173,7 +188,8 @@ public class JustificativoBean extends BaseBean {
         justificativo.setNombreDocumento(null);
         justificativo.setExtensionDocumento(null);
     }
-        
+    
+            
     //getters && setter
     public List<Justificativo> getJustificativos() {
         return justificativos;
@@ -237,6 +253,14 @@ public class JustificativoBean extends BaseBean {
 
     public void setTipoContenido(String tipoContenido) {
         this.tipoContenido = tipoContenido;
+    }
+
+    public StreamedContent getArchivoJustificativoDescarga() {
+        return archivoJustificativoDescarga;
+    }
+
+    public void setArchivoJustificativoDescarga(StreamedContent archivoJustificativoDescarga) {
+        this.archivoJustificativoDescarga = archivoJustificativoDescarga;
     }
     
 }
