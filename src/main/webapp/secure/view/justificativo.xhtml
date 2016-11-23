@@ -10,6 +10,14 @@
                     template="./../../template/template.xhtml">
         
         <ui:define name="title">#{bBase['justificativo.title']}</ui:define>
+        <script type="text/javascript">
+            function start() {
+                PF('statusDialog').show();
+            }
+            function stop() {
+                PF('statusDialog').hide();
+            }
+        </script>
                 
         <ui:define name="content">
             
@@ -86,12 +94,21 @@
                                                     <h:outputText value="#{justificativoBean.fileName}" />
                                                 </p:column>
                                                 
-                                                <p:column style="width: 27px;"> 
-                                                    <p:commandButton style="border-bottom-color: red" 
-                                                                     value="Eliminar" 
-                                                                     actionListener="#{justificativoBean.eliminarArchivo}"
-                                                                     update="panel_lista_documento"
-                                                                     immediate="true"/>
+                                                <p:column style="width: 170px;"> 
+                                                    <p:commandLink action="#{justificativoBean.eliminarArchivo}" 
+                                                                   title="Eliminar" 
+                                                                   update="panel_lista_documento"
+                                                                   immediate="true">
+                                                        <p:graphicImage value="../../resources/images/cross.png"/>
+                                                    </p:commandLink>
+                                                    &nbsp;
+                                                    <p:commandButton value="Descargar" 
+                                                                     ajax="false"
+                                                                     actionListener="#{justificativoBean.handleFileDownload}"
+                                                                     onclick="PrimeFaces.monitorDownload(start, stop);" 
+                                                                     icon="ui-icon-arrowthick-1-s">
+                                                        <p:fileDownload value="#{justificativoBean.archivoJustificativoDescarga}" />
+                                                    </p:commandButton>
                                                 </p:column>
                                             </p:row>
                                         </p:panelGrid>
@@ -193,7 +210,7 @@
                             <f:setPropertyActionListener value="#{justificativo}" target="#{justificativoBean.justificativo}"/>
                         </p:commandLink>
                     </p:column>
-                    
+                                        
                 </p:dataTable>
             </h:form>
             
@@ -207,6 +224,10 @@
                 </h:form>    
             </p:confirmDialog>
             
+            <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false" resizable="false">
+                <p:graphicImage name="images/loading.gif" />
+            </p:dialog>
+
         </ui:define>
     </ui:composition>
 </html>
