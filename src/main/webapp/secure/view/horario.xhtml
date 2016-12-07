@@ -1,0 +1,243 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- Importamos el template -->
+    <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                    template="./../../template/template.xhtml">
+        
+        <ui:define name="title">#{bBase['horario.title']}</ui:define>
+        
+        <ui:define name="content">
+            
+            <!-- popup -->
+            <p:dialog modal="true" showEffect="explode" 
+                      widgetVar="dialogo" header="Horario de Clase"
+                      hideEffect="bounce" styleClass="sin-borde"
+                      closeOnEscape="true">
+                
+                <!-- formulario alta/edición -->
+                <h:form id="form_new_edit">
+                    <p:panelGrid id="panelGrid">
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Profesor"/>
+                            </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="nroDocumento"                                                   
+                                                 converter="hashConverter"
+                                                 value="#{horarioBean.horario.idPersona}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{horarioBean.personas}"/>
+                                </p:selectOneMenu>
+                                <p:message for="nroDocumento" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                          <p:column>
+                                <p:outputLabel value="Materia"/>
+                          </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="materia"                                                   
+                                                 converter="hashConverter"
+                                                 value="#{horarioBean.horario.idMateria}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{horarioBean.materias}"/>
+                                </p:selectOneMenu>
+                                <p:message for="materia" display="tooltip"/>
+                            </p:column>
+                        </p:row>          
+                        
+                        <p:row>
+                          <p:column>
+                                <p:outputLabel value="Turno"/>
+                          </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="turno"                                                   
+                                                 converter="hashConverter"
+                                                 value="#{horarioBean.horario.idTurno}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{horarioBean.turnos}"/>
+                                    <p:ajax event="change" listener="#{horarioBean.turnoChange}" update="turno"/>
+                                </p:selectOneMenu>
+                                <p:message for="turno" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        
+                        <p:row>
+                          <p:column>
+                                <p:outputLabel value="Día"/>
+                          </p:column>
+                            <p:column>
+                                <p:selectOneMenu id="dia"                                                   
+                                                 value="#{horarioBean.horario.dia}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar" itemValue="#{null}"/>                                    
+                                    <f:selectItem itemLabel="LUNES" itemValue="LUNES" />
+                                    <f:selectItem itemLabel="MARTES" itemValue="MARTES" />
+                                    <f:selectItem itemLabel="MIERCOLES" itemValue="MIERCOLES" />
+                                    <f:selectItem itemLabel="JUEVES" itemValue="JUEVES" />
+                                    <f:selectItem itemLabel="VIERNES" itemValue="VIERNES" />
+                                    <f:selectItem itemLabel="SABADO" itemValue="SABADO" />
+                                </p:selectOneMenu>
+                                <p:message for="dia" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Hora Inicio"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputMask id="hora_inicio" 
+                                             mask="99:99"
+                                             value="#{horarioBean.horario.horaInicio}"
+                                             required="true"
+                                             size="5"
+                                             validator="#{horarioBean.validarHoraInicio}">
+                                    <f:validateRegex pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"/>
+                                </p:inputMask>  
+                                <p:message for="hora_inicio" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                                <p:outputLabel value="Hora Finalización"/>
+                            </p:column>
+                            <p:column>
+                                <p:inputMask id="hora_fin" 
+                                             mask="99:99"
+                                             required="true"
+                                             value="#{horarioBean.horario.horaFin}"
+                                             size="5"
+                                             validator="#{horarioBean.validarHoraFinalizacion}">
+                                    <f:validateRegex pattern="([01]?[0-9]|2[0-3]):[0-5][0-9]"/>
+                                </p:inputMask>
+                                <p:message for="hora_fin" display="tooltip"/>
+                            </p:column>
+                        </p:row>
+                        
+                        <p:row>
+                            <p:column>
+                            <!-- boton guardar -->
+                            <p:commandButton value="Guardar" icon="ui-icon-disk" 
+                                             actionListener="#{horarioBean.guardar}"
+                                             oncomplete="if(!args.validationFailed) PF('dialogo').hide()"
+                                             update="form_new_edit:panelGrid :form_list"
+                                             disabled="#{horarioBean.habilitaBotonGuardar}"
+                                             styleClass="boton"/>
+
+                            <!-- boton cancelar -->
+                            <p:commandButton value="Cancelar" icon="ui-icon-close" 
+                                             onclick="dialogo.hide()"
+                                             immediate="true" process="@this"
+                                             update="form_new_edit"
+                                             styleClass="boton"/>
+                            </p:column>
+                        </p:row>                                               
+                    </p:panelGrid>
+                </h:form>
+            </p:dialog>
+            
+            <!-- formulario listado -->
+            <h:form id="form_list">
+                <h1>Listado de Horarios de Clases</h1><br/>
+                <p:growl id="msg" globalOnly="true"/>
+                
+                <p:dataTable value="#{horarioBean.horarios}" var="horario" 
+                             paginator="true" rows="5" 
+                             emptyMessage="No existen registros" widgetVar="lista"
+                             id="idTableRow"
+                             styleClass="table_new">
+                    
+                    <f:facet name="header">
+                        
+                        <!-- boton nuevo -->
+                        <p:commandButton value="Nuevo" icon="ui-icon-plus" 
+                                         styleClass="boton" 
+                                         actionListener="#{horarioBean.nuevo}"
+                                         update=":form_new_edit:panelGrid"/>
+                        
+                        <!-- buscador en la tabla -->
+                        <p:outputPanel style="text-align: right">
+                            <h:outputText value="Buscar: " />
+                            <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" placeholder="Buscar .."/>
+                        </p:outputPanel>
+                        
+                    </f:facet>
+                    
+                    <!-- columnas de la tabla -->
+                    <p:column headerText="Id" sortBy="#{horario.idHorario}" filterBy="#{horario.idHorario}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.idHorario}"/>
+                    </p:column>
+                    <p:column headerText="Profesor" sortBy="#{horario.idPersona.apellido}" filterBy="#{horario.idPersona.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.idPersona.nombre} #{horario.idPersona.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Materia" sortBy="#{horario.idMateria.descripcion}" filterBy="#{horario.idMateria.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.idMateria.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Turno" sortBy="#{horario.idTurno.descripcion}" filterBy="#{horario.idTurno.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.idTurno.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Día" sortBy="#{horario.dia}" filterBy="#{horario.dia}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.dia}"/>
+                    </p:column>
+                    <p:column headerText="Inicio" sortBy="#{horario.horaInicio}" filterBy="#{horario.horaInicio}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.horaInicio}"/>
+                    </p:column>
+                    <p:column headerText="Finalización" sortBy="#{horario.horaFin}" filterBy="#{horario.horaFin}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.horaFin}"/>
+                    </p:column>
+                    <p:column headerText="Estado" sortBy="#{horario.estado}">
+                        <h:panelGroup rendered="#{horario.estado eq 1}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_activo.gif" width="12" height="13" />
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{horario.estado eq 0}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_desactivo.gif" width="14" height="15" />
+                        </h:panelGroup>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            Acciones
+                        </f:facet>  
+                        <p:commandLink action="#{horarioBean.editar}" 
+                                       title="Editar" 
+                                       update=":form_new_edit:panelGrid"
+                                       onclick="PF('dialogo').show()">
+                            <p:graphicImage value="../../resources/images/detalles.png"/>
+                            <f:setPropertyActionListener value="#{horario}" target="#{horarioBean.horario}"/>
+                            <f:setPropertyActionListener target="#{horarioBean.modificar}" value="#{true}"/>
+                        </p:commandLink>
+                        <p:commandLink title="Eliminar" onclick="PF('confirmacion').show()">
+                            <p:graphicImage value="../../resources/images/anular.png"/>
+                            <f:setPropertyActionListener value="#{horario}" target="#{horarioBean.horario}"/>
+                        </p:commandLink>
+                    </p:column>
+                    
+                </p:dataTable>
+            </h:form>
+            
+            <p:confirmDialog widgetVar="confirmacion" header="Confirmación" message="Está seguro que desea eliminar?">
+                <h:form>
+                    <p:commandButton value="Sí" action="#{horarioBean.eliminar}" 
+                                     styleClass="ui-confirmdialog-yes" 
+                                     icon="ui-icon-check" update=":form_list"
+                                     oncomplete="PF('confirmacion').hide()"/>
+                    <p:commandButton value="No" type="button" onclick="PF('confirmacion').hide()" styleClass="ui-confirmdialog-no" icon="ui-icon-close"/>
+                </h:form>    
+            </p:confirmDialog>
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

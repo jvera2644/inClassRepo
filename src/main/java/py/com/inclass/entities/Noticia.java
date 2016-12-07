@@ -15,10 +15,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -55,10 +52,6 @@ public class Noticia implements Serializable {
     private int estado;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "unidbado")
-    private int unidbado;
-    @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "titulo")
     private String titulo;
@@ -69,12 +62,22 @@ public class Noticia implements Serializable {
     private String cuerpo;
     @Basic(optional = false)
     @NotNull
-    @Lob
+    //@Lob
     @Column(name = "archivo")
     private byte[] archivo;
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario idUsuario;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "publicado")
+    private int publicado;
+    @Size(min = 1, max = 100)
+    @Column(name = "nombre_archivo")
+    private String nombreArchivo;
+    @Size(min = 1, max = 10)
+    @Column(name = "extension_archivo")
+    private String extensionArchivo;
 
     public Noticia() {
     }
@@ -83,12 +86,11 @@ public class Noticia implements Serializable {
         this.idNoticia = idNoticia;
     }
 
-    public Noticia(Integer idNoticia, Date fechaInicio, Date fechaFin, int estado, int unidbado, String titulo, String cuerpo, byte[] archivo) {
+    public Noticia(Integer idNoticia, Date fechaInicio, Date fechaFin, int estado, String titulo, String cuerpo, byte[] archivo) {
         this.idNoticia = idNoticia;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
         this.estado = estado;
-        this.unidbado = unidbado;
         this.titulo = titulo;
         this.cuerpo = cuerpo;
         this.archivo = archivo;
@@ -124,14 +126,6 @@ public class Noticia implements Serializable {
 
     public void setEstado(int estado) {
         this.estado = estado;
-    }
-
-    public int getUnidbado() {
-        return unidbado;
-    }
-
-    public void setUnidbado(int unidbado) {
-        this.unidbado = unidbado;
     }
 
     public String getTitulo() {
@@ -189,6 +183,30 @@ public class Noticia implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.Noticia[ idNoticia=" + idNoticia + " ]";
+    }
+
+    public int getPublicado() {
+        return publicado;
+    }
+
+    public void setPublicado(int publicado) {
+        this.publicado = publicado;
+    }
+
+    public String getNombreArchivo() {
+        return nombreArchivo;
+    }
+
+    public void setNombreArchivo(String nombreArchivo) {
+        this.nombreArchivo = nombreArchivo;
+    }
+
+    public String getExtensionArchivo() {
+        return extensionArchivo;
+    }
+
+    public void setExtensionArchivo(String extensionArchivo) {
+        this.extensionArchivo = extensionArchivo;
     }
     
 }

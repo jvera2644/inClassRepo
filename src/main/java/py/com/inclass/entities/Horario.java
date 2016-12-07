@@ -7,7 +7,6 @@ package py.com.inclass.entities;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,8 +19,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -46,14 +43,14 @@ public class Horario implements Serializable {
     private String dia;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 5)
     @Column(name = "hora_inicio")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date horaInicio;
+    private String horaInicio;
     @Basic(optional = false)
     @NotNull
+    @Size(min = 1, max = 5)
     @Column(name = "hora_fin")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date horaFin;
+    private String horaFin;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idHorario", fetch = FetchType.LAZY)
     private Collection<Inscripcion> inscripcionCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idHorario", fetch = FetchType.LAZY)
@@ -69,6 +66,8 @@ public class Horario implements Serializable {
     private Materia idMateria;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idHorario", fetch = FetchType.LAZY)
     private Collection<Asistencia> asistenciaCollection;
+    @Column(name = "estado")
+    private int estado;
 
     public Horario() {
     }
@@ -77,7 +76,7 @@ public class Horario implements Serializable {
         this.idHorario = idHorario;
     }
 
-    public Horario(Integer idHorario, String dia, Date horaInicio, Date horaFin) {
+    public Horario(Integer idHorario, String dia, String horaInicio, String horaFin) {
         this.idHorario = idHorario;
         this.dia = dia;
         this.horaInicio = horaInicio;
@@ -100,19 +99,19 @@ public class Horario implements Serializable {
         this.dia = dia;
     }
 
-    public Date getHoraInicio() {
+    public String getHoraInicio() {
         return horaInicio;
     }
 
-    public void setHoraInicio(Date horaInicio) {
+    public void setHoraInicio(String horaInicio) {
         this.horaInicio = horaInicio;
     }
 
-    public Date getHoraFin() {
+    public String getHoraFin() {
         return horaFin;
     }
 
-    public void setHoraFin(Date horaFin) {
+    public void setHoraFin(String horaFin) {
         this.horaFin = horaFin;
     }
 
@@ -187,6 +186,14 @@ public class Horario implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.Horario[ idHorario=" + idHorario + " ]";
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
     
 }

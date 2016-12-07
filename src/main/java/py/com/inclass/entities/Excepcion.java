@@ -57,6 +57,8 @@ public class Excepcion implements Serializable {
     @JoinColumn(name = "id_tipo_excepcion", referencedColumnName = "id_tipo_excepcion")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoExcepcion idTipoExcepcion;
+    @Column(name = "estado")
+    private int estado;
 
     public Excepcion() {
     }
@@ -143,6 +145,14 @@ public class Excepcion implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.Excepcion[ idExcepcion=" + idExcepcion + " ]";
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
     
 }

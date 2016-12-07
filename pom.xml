@@ -29,10 +29,21 @@
             <url>http://repository.primefaces.org</url>  
             <layout>default</layout>  
         </repository>
+        <repository>  
+            <id>prime-repo-secure</id>  
+            <name>PrimeFaces Maven Repository</name>  
+            <url>https://mvnrepository.com/artifact/org.primefaces/primefaces </url>  
+            <layout>default</layout>  
+        </repository> 
         <repository>
             <id>java.net-Public</id>
             <name>Maven Java Net Snapshots and Releases</name>
             <url>https://maven.java.net/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>java.net-Public-secure</id>
+            <name>Maven Java Net Snapshots and Releases</name>
+            <url>https://mvnrepository.com/artifact/commons-io/commons-io/</url>
         </repository>
     </repositories>
     
@@ -69,7 +80,7 @@
        <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>5.0</version>
+            <version>6.0</version>
         </dependency>
         <dependency>
             <groupId>org.primefaces.extensions</groupId>
@@ -106,6 +117,16 @@
             <groupId>com.sun.facelets</groupId>
             <artifactId>jsf-facelets</artifactId>
             <version>1.1.14</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>1.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.5</version>
         </dependency>
     </dependencies>
 
