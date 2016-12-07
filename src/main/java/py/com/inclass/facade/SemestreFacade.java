@@ -12,24 +12,35 @@ public class SemestreFacade  extends AbstractFacade<Semestre>{
     
     @PersistenceContext(unitName = "INCLASSPU")
     private EntityManager em;
-    
-    public SemestreFacade(){
+
+    public SemestreFacade() {
         super(Semestre.class);
     }
-    
+
     @Override
-    protected EntityManager getEntityManager(){
+    protected EntityManager getEntityManager() {
         return em;
+    }
+
+    //Semestre
+    public List<Semestre> getAll() {
+        try {
+            Query query = em.createQuery("select u from Semestre u order by u.idSemestre asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener los Semestres.", e);
+        }
+        return null;
     }
     
     //Semestre
-    public List<Semestre> getAll(){
-        try{
-            Query query = em.createQuery("select u from Semestre u order by u.idSemestre asc");
+    public List<Semestre> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from Semestre u where u.estado = 1 order by u.idSemestre asc");
             return query.getResultList();
-        }catch(Exception e){
-            logger.error("Error al obtener los Semestres.", e);
+        } catch (Exception e) {
+            logger.error("Error al obtener los semestres activos.", e);
+            throw new RuntimeException("Error al obtener los semestres activos.", e);
         }
-    return null;
-   }
+    }
 }

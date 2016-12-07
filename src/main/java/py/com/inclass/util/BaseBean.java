@@ -16,6 +16,7 @@ public class BaseBean implements Serializable{
     private static String mensajeGuardar = "Los cambios han sido guardados con éxito";
     private static String mensajeError = "Hubo un error al guardar una transacción";
     private static String mensajeUsuarioDuplicado = "Usuario ya existe";
+    private static String mensajeErrorConsulta = "Hubo un error al consultar una tabla";
         
     protected FacesContext getFacesContext() {
         return FacesContext.getCurrentInstance();
@@ -80,6 +81,9 @@ public class BaseBean implements Serializable{
     public static String getMensajeUsuarioDuplicado() {
         return mensajeUsuarioDuplicado;
     }
-    
+
+    public static String getMensajeErrorConsulta() {
+        return mensajeErrorConsulta;
+    }
     
 }

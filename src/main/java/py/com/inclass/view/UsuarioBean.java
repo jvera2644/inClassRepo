@@ -11,13 +11,8 @@ import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
-import javax.faces.component.UIComponent;
-import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-import org.eclipse.persistence.sdo.helper.SDOHelperContext;
+import javax.faces.bean.ViewScoped;
 import org.primefaces.context.RequestContext;
 import org.primefaces.model.DualListModel;
 import py.com.inclass.entities.Persona;
@@ -32,8 +27,8 @@ import py.com.inclass.util.BaseBean;
  *
  * @author Edu
  */
+@ViewScoped
 @ManagedBean
-@SessionScoped
 public class UsuarioBean extends BaseBean {
 
     //variables de clase
@@ -44,6 +39,8 @@ public class UsuarioBean extends BaseBean {
     private boolean modificar;
     private String nroDocumentoPersona;
     private String nombreApellidoPersona;
+    private boolean habilitaBotonGuardar;
+    private Persona persona;
 
     //facades
     @EJB
@@ -63,7 +60,8 @@ public class UsuarioBean extends BaseBean {
     public void usuarioMenu() {
         usuario = new Usuario();
         roles = new DualListModel<Rol>();
-        usuarios = usuarioFacade.getAllActivos();
+        usuarios = usuarioFacade.getAll();
+        habilitaBotonGuardar = false;
     }
 
     public void nuevo() {
@@ -80,30 +78,24 @@ public class UsuarioBean extends BaseBean {
         context.execute(path);
     }
 
-    public void validarNombreUsuario(FacesContext fc, UIComponent component, Object value) {
-        String user = value.toString();
-        if (usuario.getIdUsuario() == null) {   //solo para alta tener en cuenta este metodo.
-            if (usuarioFacade.getUsuarioPorNombreUsuario(user) != null) {
-                FacesMessage msg = new FacesMessage(FacesMessage.SEVERITY_WARN, getMensajeUsuarioDuplicado(), getMensajeUsuarioDuplicado());
-                fc.addMessage(null, msg);
-                throw new ValidatorException(msg);
-            }
-        }
-
-    }
-
     public void guardar() {
         try {
             usuario.setRolCollection(roles.getTarget());
             usuario.setUltimoAcceso(new Date());
+            usuario.setIdPersona(persona);
             if (!modificar) {
                 usuario.setIntentoFallido(0);
+                usuario.setEstado(1);
+                usuario.setHabilitado("S");
                 usuarioFacade.create(usuario);
             } else {
+                if (usuario.getHabilitado().equals("S")){
+                    usuario.setIntentoFallido(0);
+                }
                 usuarioFacade.edit(usuario);
             }
             setInfoMessage(getMensajeGuardar());
-            setUsuarios(usuarioFacade.getAllActivos());
+            setUsuarios(usuarioFacade.getAll());
         } catch (Exception e) {
             setErrorMessage(getMensajeError());
             logger.error(getMensajeError(), e);
@@ -117,6 +109,9 @@ public class UsuarioBean extends BaseBean {
             listaSource.remove(rol);
         }
         roles = new DualListModel<Rol>(listaSource, listaTarget);
+        nroDocumentoPersona = usuario.getIdPersona().getNumeroDocumento();
+        nombreApellidoPersona = usuario.getIdPersona().getNombre() + ", " + usuario.getIdPersona().getApellido();
+        persona = usuario.getIdPersona();
     }
 
     public void eliminar() {
@@ -124,7 +119,7 @@ public class UsuarioBean extends BaseBean {
             Usuario unUsuario = usuario;
             unUsuario.setEstado(Integer.parseInt("0"));
             usuarioFacade.edit(unUsuario);
-            usuarios = usuarioFacade.getAllActivos();
+            usuarios = usuarioFacade.getAll();
             setInfoMessage(getMensajeGuardar());
         } catch (Exception e) {
             setWarnMessage("Es refenciada por otra entidad");
@@ -138,20 +133,37 @@ public class UsuarioBean extends BaseBean {
     }
     
     public void nroDocumentoOnChanged() {
+        habilitaBotonGuardar = false;
         try{
             //verificamos si el nro. de documento ingresado existe
-            Persona persona = personaFacade.findByNroDocumento(nroDocumentoPersona);
+            persona = personaFacade.findByNroDocumento(nroDocumentoPersona);
             if(persona != null){
                 setNombreApellidoPersona(persona.getNombre() + ", " + persona.getApellido());
             }else{
-                setNombreApellidoPersona("Sin Resultados!");
-                setWarnMessage("Persona no existe!");
+                setNombreApellidoPersona("");
+                setWarnMessage(nroDocumentoPersona + " no está registrado.");
+                habilitaBotonGuardar = true;
             }
                 
         }catch(Exception e){
             logger.error("Error al buscar persona por nro. de documento", e);
         }
     }
+    
+    
+    public void nombreUsuarioOnChanged() {
+        habilitaBotonGuardar = false;
+        try{
+            String user = usuario.getUsuario();
+            if (usuarioFacade.getUsuarioPorNombreUsuario(user) != null) {
+                setWarnMessage(user + " ya se encuentra registrado.");
+                habilitaBotonGuardar = true;
+            }                
+        }catch(Exception e){
+            logger.error("Error al buscar persona por nombre de usuario.", e);
+        }
+    }
+    
 
     //getters && setters
     public List<Usuario> getUsuarios() {
@@ -210,7 +222,20 @@ public class UsuarioBean extends BaseBean {
         this.nombreApellidoPersona = nombreApellidoPersona;
     }
 
-    
-    
+    public boolean getHabilitaBotonGuardar() {
+        return habilitaBotonGuardar;
+    }
+
+    public void setHabilitaBotonGuardar(boolean habilitaBotonGuardar) {
+        this.habilitaBotonGuardar = habilitaBotonGuardar;
+    }
+
+    public Persona getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
 
 }

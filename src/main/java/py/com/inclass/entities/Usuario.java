@@ -64,7 +64,9 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "estado")
-    private int estado;   
+    private int estado;  
+    @Column(name = "habilitado")
+    private String habilitado;
     @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     @JoinTable(name = "unidb.usuario_rol", joinColumns = {
         @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
@@ -94,13 +96,14 @@ public class Usuario implements Serializable {
         this.idUsuario = idUsuario;
     }
 
-    public Usuario(Integer idUsuario, String usuario, String contrasena, Date ultimoAcceso, int intentoFallido, int estado) {
+    public Usuario(Integer idUsuario, String usuario, String contrasena, Date ultimoAcceso, int intentoFallido, int estado, String habilitado) {
         this.idUsuario = idUsuario;
         this.usuario = usuario;
         this.contrasena = contrasena;
         this.ultimoAcceso = ultimoAcceso;
         this.intentoFallido = intentoFallido;
         this.estado = estado;
+        this.habilitado = habilitado;
     }
 
     public Integer getIdUsuario() {
@@ -230,6 +233,14 @@ public class Usuario implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.Usuario[ idUsuario=" + idUsuario + " ]";
+    }
+
+    public String getHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(String habilitado) {
+        this.habilitado = habilitado;
     }
     
 }

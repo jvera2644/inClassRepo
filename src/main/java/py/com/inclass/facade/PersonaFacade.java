@@ -43,6 +43,16 @@ public class PersonaFacade extends AbstractFacade<Persona>{
         return null;
     }
     
+    public List<Persona> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from Persona u where u.estado = 1 order by u.idPersona asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener todas las personas del sistema.", e);
+            throw new RuntimeException("Error al obtener todas las personas del sistema.", e);
+        }
+    }
+    
     public Persona findByNroDocumento(String nroDocumento) {
         try {
             Query query = em.createQuery("select u from Persona u where u.numeroDocumento like :numeroDocumento");

@@ -45,6 +45,17 @@ public class MenuFacade extends AbstractFacade<Menu> {
         
     }
     
+    public List<Menu> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from Menu u where u.estado = 1 order by u.idMenu asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener todos los menús activos del sistema.", e);
+        }
+        return null;
+    }
+    
+    
     public Menu findByNombre(String nombre) {
         try {
             Query query = em.createQuery("select u from Menu u where UPPER(u.nombre) = UPPER(:nombre)");

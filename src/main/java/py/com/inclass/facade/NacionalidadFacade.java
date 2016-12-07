@@ -12,24 +12,35 @@ public class NacionalidadFacade  extends AbstractFacade<Nacionalidad>{
     
     @PersistenceContext(unitName = "INCLASSPU")
     private EntityManager em;
-    
-    public NacionalidadFacade(){
+
+    public NacionalidadFacade() {
         super(Nacionalidad.class);
     }
-    
+
     @Override
-    protected EntityManager getEntityManager(){
+    protected EntityManager getEntityManager() {
         return em;
+    }
+
+    //Nacionalidad
+    public List<Nacionalidad> getAll() {
+        try {
+            Query query = em.createQuery("select u from Nacionalidad u order by u.idNacionalidad asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener las Nacionalidades.", e);
+        }
+        return null;
     }
     
     //Nacionalidad
-    public List<Nacionalidad> getAll(){
-        try{
-            Query query = em.createQuery("select u from Nacionalidad u order by u.idNacionalidad asc");
+    public List<Nacionalidad> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from Nacionalidad u where u.estado = 1 order by u.idNacionalidad asc");
             return query.getResultList();
-        }catch(Exception e){
-            logger.error("Error al obtener las Nacionalidades.", e);
+        } catch (Exception e) {
+            logger.error("Error al obtener las nacionalidades activas del sistema.", e);
+            throw new RuntimeException("Error al obtener las nacionalidades activas del sistema.", e);
         }
-    return null;
-   }
+    }
 }

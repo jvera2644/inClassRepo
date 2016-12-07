@@ -12,24 +12,27 @@ public class ParametroFacade  extends AbstractFacade<Parametro>{
     
     @PersistenceContext(unitName = "INCLASSPU")
     private EntityManager em;
-    
-    public ParametroFacade(){
+
+    public ParametroFacade() {
         super(Parametro.class);
     }
-    
+
     @Override
-    protected EntityManager getEntityManager(){
+    protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     //Parametro
-    public List<Parametro> getAll(){
-        try{
+    public List<Parametro> getAll() {
+        try {
             Query query = em.createQuery("select u from Parametro u order by u.idParametro asc");
             return query.getResultList();
-        }catch(Exception e){
-            logger.error("Error al obtener los Parametros.", e);
+        } catch (Exception e) {
+            logger.error("Error al obtener los parámetros del sistema.", e);
+            throw new RuntimeException("Error al obtener los parámetros del sistema.", e);
         }
-    return null;
-   }
+    }
+    
+    
+    
 }

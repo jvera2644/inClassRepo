@@ -2,7 +2,7 @@
 body {
     background: #f0f1f1 url(../images/bg.jpg) repeat-x;
     font-family: 'Open Sans', sans-serif;
-    font-size:12px;
+    font-size:13px;
     color:#2c3e50;
 }
 
@@ -1089,6 +1089,53 @@ table.resultado-calc span {
     padding:0px;
     text-decoration: none;
     text-shadow: 0px 3px 1px #5E2320;
+}
+
+/*
+Theme: blue like ice
+Author: Erik Ginnerskov
+Web site: http://hjemmesideskolen.dk/
+*/
+form .table_new  {
+    background: no-repeat;
+    color: #000;
+    text-align:left;
+    font-size:12px;
+    border-spacing: 4px;
+    border-left:3px solid #567;
+    border-right:3px solid #000;
+    padding: 3px;
+    border: 1px solid #a8a8a8;
+    font-family: Verdana, arial, helvetica, sans-serif;
+}
+
+form .table_new th, td, tr{
+    border: 1px solid #a8a8a8 !important;
+}
+
+
+.boton{
+    font-size:10px;
+    font-family:Verdana,Helvetica;
+    font-weight:bold;
+    color: #4C5053 !important;
+    border:2px;
+    width:100px;
+    height:35px;
+    background-color: #00557F !important;
+    float: left;
+}
+
+.ui-datatable .ui-datatable-header, .ui-datatable .ui-datatable-footer {
+    text-align: center;
+    padding: 17px 7px;
+}
+
+.ui-widget-content {
+    border: 0px solid #a8a8a8;
+    background: transparent;
+    color: inherit;
+    border: 3px solid #a8a8a8 !important;
 }
 
 /* --------------------------------------------------------------------------  */

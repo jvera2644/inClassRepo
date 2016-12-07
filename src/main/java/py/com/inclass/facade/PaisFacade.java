@@ -12,24 +12,34 @@ public class PaisFacade  extends AbstractFacade<Pais>{
     
     @PersistenceContext(unitName = "INCLASSPU")
     private EntityManager em;
-    
-    public PaisFacade(){
+
+    public PaisFacade() {
         super(Pais.class);
     }
-    
+
     @Override
-    protected EntityManager getEntityManager(){
+    protected EntityManager getEntityManager() {
         return em;
     }
-    
+
     //Pais
-    public List<Pais> getAll(){
-        try{
+    public List<Pais> getAll() {
+        try {
             Query query = em.createQuery("select u from Pais u order by u.idPais asc");
             return query.getResultList();
-        }catch(Exception e){
+        } catch (Exception e) {
             logger.error("Error al obtener los Paises.", e);
         }
-    return null;
-   }
+        return null;
+    }
+
+    public List<Pais> getAllActivos() {
+        try {
+            Query query = em.createQuery("select u from Pais u where u.estado = 1 order by u.idPais asc");
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.error("Error al obtener los paises activos.", e);
+        }
+        return null;
+    } 
 }

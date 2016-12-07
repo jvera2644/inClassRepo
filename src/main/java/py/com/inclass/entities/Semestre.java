@@ -39,6 +39,9 @@ public class Semestre implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "descripcion")
     private String descripcion;
+    @Basic(optional = false)
+    @Column(name = "estado")
+    private int estado;
 
     public Semestre() {
     }
@@ -91,6 +94,14 @@ public class Semestre implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.Semestre[ idSemestre=" + idSemestre + " ]";
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
     
 }
