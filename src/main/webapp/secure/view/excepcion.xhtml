@@ -93,8 +93,7 @@
             </p:dialog>
             
             <!-- formulario listado -->
-            <h:form id="form_list">
-                <h1>Listado de Excepciones del Sistema</h1><br/>
+            <h:form id="form_list">                
                 <p:growl id="msg" globalOnly="true"/>
                 
                 <p:dataTable value="#{excepcionBean.excepciones}" var="excepcion" 
@@ -111,10 +110,8 @@
                                          actionListener="#{excepcionBean.nuevo}"
                                          update=":form_new_edit:panelGrid"/>
                         
-                        <!-- buscador en la tabla -->
                         <p:outputPanel style="text-align: right">
-                            <h:outputText value="Buscar: " />
-                            <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" placeholder="Buscar .."/>
+                            <u><h2>Excepciones</h2></u>
                         </p:outputPanel>
                         
                     </f:facet>

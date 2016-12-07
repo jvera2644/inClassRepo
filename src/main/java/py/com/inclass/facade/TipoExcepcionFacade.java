@@ -32,8 +32,8 @@ public class TipoExcepcionFacade  extends AbstractFacade<TipoExcepcion>{
         }
         return null;
     }
-    
-     public List<TipoExcepcion> getAllActivos() {
+
+    public List<TipoExcepcion> getAllActivos() {
         try {
             Query query = em.createQuery("select u from TipoExcepcion u where u.estado = 1 order by u.idTipoExcepcion asc");
             return query.getResultList();
@@ -42,4 +42,16 @@ public class TipoExcepcionFacade  extends AbstractFacade<TipoExcepcion>{
         }
         return null;
     }
+    
+    public TipoExcepcion getTipoExcepcionPorDescripcion(String descripcion){
+        try {
+            Query query = em.createQuery("select u from TipoExcepcion u where u.estado = 1 and upper(u.descripcion) like upper(:descripcion) order by u.idTipoExcepcion asc");
+            query.setParameter("descripcion", "%"+descripcion+"%");
+            return (TipoExcepcion) query.getSingleResult();
+        } catch (Exception e) {
+            logger.error("Error al obtener el tipo de excepcion: "+descripcion, e);
+        }
+        return null;
+    }
+    
 }

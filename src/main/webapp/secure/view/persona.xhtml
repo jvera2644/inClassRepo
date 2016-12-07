@@ -290,7 +290,6 @@
             
             <!-- formulario listado -->
             <h:form id="form_list">
-                <h1>Listado de Personas</h1><br/>
                 <p:growl id="msg" globalOnly="true"/>
                 
                 <p:dataTable value="#{personaBean.personas}" var="persona" 
@@ -307,10 +306,8 @@
                                          actionListener="#{personaBean.nuevo}"
                                          update=":form_new_edit:panelGrid"/>
                         
-                        <!-- buscador en la tabla -->
                         <p:outputPanel style="text-align: right">
-                            <h:outputText value="Buscar: " />
-                            <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" placeholder="Buscar .."/>
+                            <u><h2>Personas</h2></u>
                         </p:outputPanel>
                         
                     </f:facet>

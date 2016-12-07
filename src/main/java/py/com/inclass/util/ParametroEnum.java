@@ -12,7 +12,10 @@ package py.com.inclass.util;
 public enum ParametroEnum {
     
     PAR_CAN_INT_FAL("Cantidad de Intentos Fallidos","PAR_CAN_INT_FAL",0),
-    PAR_TAM_ARC_JUS("Tamaño Archivo Justificativo","PAR_TAM_ARC_JUS",0);
+    PAR_TAM_ARC_JUS("Tamaño Archivo Justificativo","PAR_TAM_ARC_JUS",0),
+    PAR_EXC_LLE_TAR("Tipo de excepción por llegada tardía","PAR_EXC_LLE_TAR",0),
+    PAR_CAN_MIN_PRO("Cantidad de minutos por llegada tardía Profesor","PAR_CAN_MIN_PRO",0),
+    PAR_CAN_MIN_ALU("Cantidad de minutos por llegada tardía Alumno","PAR_CAN_MIN_ALU",0);
     
     private final String label;
     private final String codigo;

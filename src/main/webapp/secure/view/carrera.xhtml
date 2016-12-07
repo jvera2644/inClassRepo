@@ -96,7 +96,6 @@
             
             <!-- formulario listado -->
             <h:form id="form_list">
-                <h1>Listado de Carreras Universitarias</h1><br/>
                 <p:growl id="msg" globalOnly="true"/>
                 
                 <p:dataTable value="#{carreraBean.carreras}" var="carrera" 
@@ -113,10 +112,8 @@
                                          actionListener="#{carreraBean.nuevo}"
                                          update=":form_new_edit:panelGrid"/>
                         
-                        <!-- buscador en la tabla -->
-                        <p:outputPanel style="text-align: right">
-                            <h:outputText value="Buscar: " />
-                            <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" placeholder="Buscar .."/>
+                         <p:outputPanel style="text-align: right">
+                            <u><h2>Carreras Universitarias</h2></u>
                         </p:outputPanel>
                         
                     </f:facet>

@@ -11,12 +11,6 @@
         
         <ui:define name="title">#{bBase['user.title']}</ui:define>
         
-        <!--ui:define name="top">
-            <h:form>
-                <p:commandButton value="Logout" action="#{SecurityBean.logout()}" style="float: right"/>
-            </h:form>
-        </ui:define-->
-        
         <ui:define name="content">
             
             <!-- popup -->
@@ -126,7 +120,6 @@
             
             <!-- formulario listado -->
             <h:form id="form_list" styleClass="table">
-                <h1>Listado de Usuarios</h1><br/>
                 <p:growl id="msg" globalOnly="true"/>
                 
                 <p:dataTable value="#{usuarioBean.usuarios}" var="usuario" 
@@ -142,10 +135,8 @@
                                          actionListener="#{usuarioBean.nuevo}"
                                          update=":form_new_edit:panelGrid"/>
                         
-                        <!-- buscador en la tabla -->
-                        <p:outputPanel style="text-align: right">
-                            <h:outputText value="Buscar: " />
-                            <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" placeholder="Buscar .."/>
+                         <p:outputPanel style="text-align: right">
+                            <u><h2>Usuarios del Sistema</h2></u>
                         </p:outputPanel>
                         
                     </f:facet>
