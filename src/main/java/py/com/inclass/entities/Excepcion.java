@@ -48,7 +48,7 @@ public class Excepcion implements Serializable {
     private Date fechaEvento;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
+    @Size(min = 1, max = 100)
     @Column(name = "observacion_evento")
     private String observacionEvento;
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
