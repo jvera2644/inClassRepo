@@ -9,13 +9,13 @@
     <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
                     template="./../../template/template.xhtml">
         
-        <ui:define name="title">#{bBase['permiso.title']}</ui:define>
+        <ui:define name="title">#{bBase['inscripcion.title']}</ui:define>
         
         <ui:define name="content">
             
             <!-- popup -->
             <p:dialog modal="true" showEffect="explode" 
-                      widgetVar="dialogo" header="Permiso"
+                      widgetVar="dialogo" header="Inscripción"
                       hideEffect="bounce" styleClass="sin-borde"
                       closeOnEscape="true">
                 
@@ -25,74 +25,41 @@
                         
                         <p:row>
                             <p:column>
-                                <p:outputLabel value="Descripción"/>
+                                <p:outputLabel value="Alumno"/>
                             </p:column>
                             <p:column>
-                                <p:inputText id="descripcion" 
-                                             value="#{permisoBean.permiso.descripcion}"
-                                             required="true" 
-                                             size="30"
-                                             maxlength="45"
-                                             onkeyup="this.value=this.value.toUpperCase()"> 
-                                </p:inputText>
-                                <p:message for="descripcion" display="tooltip"/>
-                            </p:column>
-                        </p:row>
-
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel value="URL Vista"/>
-                            </p:column>
-                            <p:column>
-                                <p:inputText id="urlvista" 
-                                             value="#{permisoBean.permiso.urlPrograma}"
-                                             required="true" 
-                                             size="40"
-                                             maxlength="100"
-                                             placeholder="/secure/view/.. "
-                                             onkeyup="this.value=this.value.toLowerCase()"> 
-                                </p:inputText>
-                                <p:message for="urlvista" display="tooltip"/>
-                            </p:column>
-                        </p:row>
-                        
-                        
-                        <p:row>
-                            <p:column>
-                                <p:outputLabel value="Menú"/>
-                            </p:column>
-                            <p:column>
-                                <p:selectOneMenu id="menu"                                                   
+                                <p:selectOneMenu id="alumno"                                                   
                                                  converter="hashConverter"
-                                                 value="#{permisoBean.permiso.idMenu}" 
+                                                 value="#{inscripcionBean.inscripcion.idPersona}" 
                                                  required="true">
                                     <f:selectItem noSelectionOption="true" itemLabel="Seleccionar" itemValue="#{null}"/>                                    
-                                    <f:selectItems value="#{permisoBean.menus}"/>
+                                    <f:selectItems value="#{inscripcionBean.personas}"/>
                                 </p:selectOneMenu>
-                                <p:message for="menu" display="tooltip"/>
+                                <p:message for="alumno" display="tooltip"/>
                             </p:column>
                         </p:row>
                         
-                        
-                        <!--p:row>
+                        <p:row>
+                          <p:column>
+                                <p:outputLabel value="Horario"/>
+                          </p:column>
                             <p:column>
-                                <p:outputLabel value="Estado"/>
+                                <p:selectOneMenu id="horario"                                                   
+                                                 converter="hashConverter"
+                                                 value="#{inscripcionBean.inscripcion.idHorario}" 
+                                                 required="true">
+                                    <f:selectItem noSelectionOption="true" itemLabel="Seleccionar" itemValue="#{null}"/>                                    
+                                    <f:selectItems value="#{inscripcionBean.horarios}"/>
+                                </p:selectOneMenu>
+                                <p:message for="horario" display="tooltip"/>
                             </p:column>
-                            <p:column>
-                                <p:selectOneRadio id="estado" value="#{tipoDocumentoBean.tipoDocumento.estado}">
-                                    <f:selectItem itemLabel="Activo" itemValue="1" />
-                                    <f:selectItem itemLabel="Inactivo" itemValue="0" />
-                                </p:selectOneRadio>
-                                <p:message for="estado"/>
-                            </p:column>
-                        </p:row-->
-                        
+                        </p:row>          
                         
                         <p:row>
                             <p:column>
                             <!-- boton guardar -->
                             <p:commandButton value="Guardar" icon="ui-icon-disk" 
-                                             actionListener="#{permisoBean.guardar}"
+                                             actionListener="#{inscripcionBean.guardar}"
                                              oncomplete="if(!args.validationFailed) PF('dialogo').hide()"
                                              update="form_new_edit:panelGrid :form_list"
                                              styleClass="boton"/>
@@ -110,46 +77,59 @@
             </p:dialog>
             
             <!-- formulario listado -->
-            <h:form id="form_list" styleClass="table_new">
+            <h:form id="form_list">
                 <p:growl id="msg" globalOnly="true"/>
                 
-                <p:dataTable value="#{permisoBean.permisos}" var="permiso" 
+                <p:dataTable value="#{inscripcionBean.inscripciones}" var="inscripcion" 
                              paginator="true" rows="5" 
                              emptyMessage="No existen registros" widgetVar="lista"
-                             id="idTableRow">
+                             id="idTableRow"
+                             styleClass="table_new">
                     
                     <f:facet name="header">
                         
                         <!-- boton nuevo -->
                         <p:commandButton value="Nuevo" icon="ui-icon-plus" 
                                          styleClass="boton" 
-                                         actionListener="#{permisoBean.nuevo}"
+                                         actionListener="#{inscripcionBean.nuevo}"
                                          update=":form_new_edit:panelGrid"/>
                         
                          <p:outputPanel style="text-align: right">
-                            <u><h2>Permisos</h2></u>
+                            <u><h2>Inscripciones de Alumnos</h2></u>
                         </p:outputPanel>
                         
                     </f:facet>
                     
                     <!-- columnas de la tabla -->
-                    <p:column headerText="Id Permiso" sortBy="#{permiso.idPermiso}" filterBy="#{permiso.idPermiso}" filterMatchMode="contains">
-                        <h:outputText value="#{permiso.idPermiso}"/>
+                    <p:column headerText="Id" sortBy="#{inscripcion.idInscripcion}" filterBy="#{inscripcion.idInscripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{inscripcion.idInscripcion}"/>
                     </p:column>
-                    <p:column headerText="Descripción" sortBy="#{permiso.descripcion}" filterBy="#{permiso.descripcion}" filterMatchMode="contains">
-                        <h:outputText value="#{permiso.descripcion}"/>
+                    <p:column headerText="Alumno" sortBy="#{inscripcion.idPersona.apellido}" filterBy="#{inscripcion.idPersona.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{inscripcion.idPersona.nombre} #{inscripcion.idPersona.apellido}"/>
                     </p:column>
-                    <p:column headerText="URL Vista" sortBy="#{permiso.urlPrograma}" filterBy="#{permiso.urlPrograma}" filterMatchMode="contains">
-                        <h:outputText value="#{permiso.urlPrograma}"/>
+                    <p:column headerText="Materia" sortBy="#{inscripcion.idHorario.idMateria.descripcion}" filterBy="#{inscripcion.idHorario.idMateria.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{inscripcion.idHorario.idMateria.descripcion}"/>
                     </p:column>
-                    <p:column headerText="Menú" sortBy="#{permiso.idMenu.nombre}" filterBy="#{permiso.idMenu.nombre}" filterMatchMode="contains">
-                        <h:outputText value="#{permiso.idMenu.nombre}"/>
+                    <p:column headerText="Turno" sortBy="#{inscripcion.idHorario.idTurno.descripcion}" filterBy="#{inscripcion.idHorario.idTurno.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{inscripcion.idHorario.idTurno.descripcion}"/>
                     </p:column>
-                    <p:column headerText="Estado" sortBy="#{permiso.estado}">
-                        <h:panelGroup rendered="#{permiso.estado eq 1}">
+                    <p:column headerText="Día" sortBy="#{inscripcion.idHorario.dia}" filterBy="#{inscripcion.idHorario.dia}" filterMatchMode="contains">
+                        <h:outputText value="#{inscripcion.idHorario.dia}"/>
+                    </p:column>
+                    <p:column headerText="Inicio" sortBy="#{inscripcion.idHorario.horaInicio}" filterBy="#{inscripcion.idHorario.horaInicio}" filterMatchMode="contains">
+                        <h:outputText value="#{inscripcion.idHorario.horaInicio}"/>
+                    </p:column>
+                    <p:column headerText="Finalización" sortBy="#{inscripcion.idHorario.horaFin}" filterBy="#{inscripcion.idHorario.horaFin}" filterMatchMode="contains">
+                        <h:outputText value="#{inscripcion.idHorario.horaFin}"/>
+                    </p:column>
+                    <p:column headerText="Profesor" sortBy="#{inscripcion.idHorario.idPersona.apellido}" filterBy="#{inscripcion.idHorario.idPersona.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{inscripcion.idHorario.idPersona.apellido} #{inscripcion.idHorario.idPersona.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Estado" sortBy="#{inscripcion.estado}">
+                        <h:panelGroup rendered="#{inscripcion.estado eq 1}">
                             <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_activo.gif" width="12" height="13" />
                         </h:panelGroup>
-                        <h:panelGroup rendered="#{permiso.estado eq 0}">
+                        <h:panelGroup rendered="#{inscripcion.estado eq 0}">
                             <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_desactivo.gif" width="14" height="15" />
                         </h:panelGroup>
                     </p:column>
@@ -157,17 +137,17 @@
                         <f:facet name="header">
                             Acciones
                         </f:facet>  
-                        <p:commandLink action="#{permisoBean.editar}" 
+                        <p:commandLink action="#{inscripcionBean.editar}" 
                                        title="Editar" 
                                        update=":form_new_edit:panelGrid"
                                        onclick="PF('dialogo').show()">
                             <p:graphicImage value="../../resources/images/detalles.png"/>
-                            <f:setPropertyActionListener value="#{permiso}" target="#{permisoBean.permiso}"/>
-                            <f:setPropertyActionListener target="#{permisoBean.modificar}" value="#{true}"/>
+                            <f:setPropertyActionListener value="#{inscripcion}" target="#{inscripcionBean.inscripcion}"/>
+                            <f:setPropertyActionListener target="#{inscripcionBean.modificar}" value="#{true}"/>
                         </p:commandLink>
                         <p:commandLink title="Eliminar" onclick="PF('confirmacion').show()">
                             <p:graphicImage value="../../resources/images/anular.png"/>
-                            <f:setPropertyActionListener value="#{permiso}" target="#{permisoBean.permiso}"/>
+                            <f:setPropertyActionListener value="#{inscripcion}" target="#{inscripcionBean.inscripcion}"/>
                         </p:commandLink>
                     </p:column>
                     
@@ -176,7 +156,7 @@
             
             <p:confirmDialog widgetVar="confirmacion" header="Confirmación" message="Está seguro que desea eliminar?">
                 <h:form>
-                    <p:commandButton value="Sí" action="#{permisoBean.eliminar}" 
+                    <p:commandButton value="Sí" action="#{inscripcionBean.eliminar}" 
                                      styleClass="ui-confirmdialog-yes" 
                                      icon="ui-icon-check" update=":form_list"
                                      oncomplete="PF('confirmacion').hide()"/>

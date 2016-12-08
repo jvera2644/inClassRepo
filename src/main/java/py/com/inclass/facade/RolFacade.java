@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import py.com.inclass.entities.Rol;
+import py.com.inclass.entities.Usuario;
 
 /**
  *
@@ -50,6 +51,32 @@ public class RolFacade extends AbstractFacade<Rol>{
             logger.error("Error al obtener todos los roles activos del sistema.", e);
         }
         return null;
+    }
+    
+    public boolean tieneRolAdministrador(Usuario usuario){
+        try{
+            for(Rol r: usuario.getRolCollection()){
+                if(r.getDescripcion().equalsIgnoreCase("administrador")){
+                    return true;
+                }
+            }
+        }catch(Exception e){
+            logger.error("Error al obtener todos los roles activos del usuario: "+usuario.getUsuario(), e);
+        }
+        return false;
+    }
+    
+    public boolean tieneRolAlumno(Usuario usuario){
+        try{
+            for(Rol r: usuario.getRolCollection()){
+                if(r.getDescripcion().equalsIgnoreCase("alumno")){
+                    return true;
+                }
+            }
+        }catch(Exception e){
+            logger.error("Error al obtener todos los roles activos del usuario: "+usuario.getUsuario(), e);
+        }
+        return false;
     }
     
 }   

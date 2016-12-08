@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- Importamos el template -->
+    <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                    template="./../../template/template.xhtml">
+        
+        <ui:define name="title">#{bBase['horarioProfesor.title']}</ui:define>
+        
+        <ui:define name="content">
+            
+            <!-- formulario listado -->
+            <h:form id="form_list">
+                <p:growl id="msg" globalOnly="true"/>
+                
+                <p:dataTable value="#{horarioProfesorBean.horarios}" var="horario" 
+                             paginator="true" rows="5" 
+                             emptyMessage="No existen registros" widgetVar="lista"
+                             id="idTableRow"
+                             styleClass="table_new">
+                    
+                    <f:facet name="header">
+                        
+                        <p:outputPanel style="text-align: left">
+                            <u><h2>Horarios del Profesor</h2></u>
+                        </p:outputPanel>
+                        
+                    </f:facet>
+                    
+                    <!-- columnas de la tabla -->
+                    <p:column headerText="Id" sortBy="#{horario.idHorario}" filterBy="#{horario.idHorario}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.idHorario}"/>
+                    </p:column>
+                    <p:column headerText="Profesor" sortBy="#{horario.idPersona.apellido}" filterBy="#{horario.idPersona.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.idPersona.nombre} #{horario.idPersona.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Materia" sortBy="#{horario.idMateria.descripcion}" filterBy="#{horario.idMateria.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.idMateria.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Turno" sortBy="#{horario.idTurno.descripcion}" filterBy="#{horario.idTurno.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.idTurno.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Día" sortBy="#{horario.dia}" filterBy="#{horario.dia}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.dia}"/>
+                    </p:column>
+                    <p:column headerText="Inicio" sortBy="#{horario.horaInicio}" filterBy="#{horario.horaInicio}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.horaInicio}"/>
+                    </p:column>
+                    <p:column headerText="Finalización" sortBy="#{horario.horaFin}" filterBy="#{horario.horaFin}" filterMatchMode="contains">
+                        <h:outputText value="#{horario.horaFin}"/>
+                    </p:column>
+                    <p:column>
+                        <h:panelGroup rendered="#{not horario.claseIniciadaEnHorario}">
+                            <p:commandLink action="#{horarioProfesorBean.iniciarClase}" 
+                                            title="Iniciar Clase" 
+                                            update="form_list">
+                                 <p:graphicImage value="../../resources/images/active.png"/>
+                                 <f:setPropertyActionListener value="#{horario}" target="#{horarioProfesorBean.horario}"/>
+                            </p:commandLink>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{horario.claseIniciadaEnHorario}">
+                            <p:commandLink action="#" 
+                                           disabled="true"
+                                           title="Clase iniciada">
+                                 <p:graphicImage value="../../resources/images/inactive.png"/>
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                    
+                </p:dataTable>
+            </h:form>
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

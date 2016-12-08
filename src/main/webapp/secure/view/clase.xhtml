@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- Importamos el template -->
+    <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                    template="./../../template/template.xhtml">
+        
+        <ui:define name="title">#{bBase['clase.title']}</ui:define>
+        
+        <ui:define name="content">
+            
+            <!-- formulario listado -->
+            <h:form id="form_list">
+                
+                <p:growl id="msg" globalOnly="true"/>
+                
+                <p:dataTable value="#{claseBean.clases}" var="clase" 
+                             paginator="true" rows="5" 
+                             emptyMessage="No existen registros" widgetVar="lista"
+                             id="idTableRow"
+                             styleClass="table_new">
+                    
+                    <f:facet name="header">
+                        
+                        <p:outputPanel style="text-align: left">
+                            <u><h2>Clases Habilitadas</h2></u>
+                        </p:outputPanel>
+                        
+                    </f:facet>
+                    
+                    <!-- columnas de la tabla -->
+                    <p:column headerText="Nombre" sortBy="#{clase.idPersona.nombre}" filterBy="#{clase.idPersona.nombre}" filterMatchMode="contains">
+                        <h:outputText value="#{clase.idPersona.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Apellido" sortBy="#{clase.idPersona.apellido}" filterBy="#{clase.idPersona.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{clase.idPersona.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Materia" sortBy="#{clase.idHorario.idMateria.descripcion}" filterBy="#{clase.idHorario.idMateria.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{clase.idHorario.idMateria.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Turno" sortBy="#{clase.idHorario.idTurno.descripcion}" filterBy="#{clase.idHorario.idTurno.descripcion}" filterMatchMode="contains">
+                        <h:outputText value="#{clase.idHorario.idTurno.descripcion}"/>
+                    </p:column>
+                    <p:column headerText="Día" sortBy="#{clase.idHorario.dia}" filterBy="#{clase.idHorario.dia}" filterMatchMode="contains">
+                        <h:outputText value="#{clase.idHorario.dia}"/>
+                    </p:column>
+                    <p:column headerText="Inicio" sortBy="#{clase.idHorario.horaInicio}" filterBy="#{clase.idHorario.horaInicio}" filterMatchMode="contains">
+                        <h:outputText value="#{clase.idHorario.horaInicio}"/>
+                    </p:column>
+                    <p:column headerText="Finalización" sortBy="#{clase.idHorario.horaFin}" filterBy="#{clase.idHorario.horaFin}" filterMatchMode="contains">
+                        <h:outputText value="#{clase.idHorario.horaFin}"/>
+                    </p:column>
+                    <p:column headerText="Inicio Clase" sortBy="#{clase.fechaHoraInicio}" filterBy="#{clase.fechaHoraInicio}" filterMatchMode="contains">
+                        <h:outputText value="#{clase.fechaHoraInicio}">
+                            <f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss" timeZone="America/Asuncion"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Fin Clase" sortBy="#{clase.fechaHoraFin}" filterBy="#{clase.fechaHoraFin}" filterMatchMode="contains">
+                        <h:outputText value="#{clase.fechaHoraFin}">
+                            <f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss" timeZone="America/Asuncion"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <h:panelGroup rendered="#{clase.fechaHoraFin eq null}">
+                            <p:commandLink action="#{llamarListaBean.listarMarcacionesDeAlumnos}" 
+                                            title="Finalizar Clase"
+                                            ajax="false">
+                                 <p:graphicImage value="../../resources/images/active.png"/>
+                                 <f:param name="claseId" value="#{clase.idClases}" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{clase.fechaHoraFin ne null}">
+                            <p:commandLink action="#" 
+                                           disabled="true">
+                                 <p:graphicImage value="../../resources/images/inactive.png"/>
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                    
+                </p:dataTable>
+            </h:form>
+            
+        </ui:define>
+    </ui:composition>
+</html>
+
