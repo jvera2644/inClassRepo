@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    
+    <!-- Importamos el template -->
+    <ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                    template="./../../template/template.xhtml">
+        
+        <ui:define name="title">#{bBase['llamarLista.title']}</ui:define>
+        
+        <ui:define name="content">
+            
+            <!-- formulario listado -->
+            <h:form id="form_list">
+                <h1 align="center">Marcaciones de Alumnos</h1>
+                <div align="right">
+                    <h5>Hora Inicio Clase</h5>
+                    <h:outputText value="#{llamarListaBean.clase.fechaHoraInicio}">
+                        <f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss" timeZone="America/Asuncion"/>
+                    </h:outputText>    
+                </div>
+                <h4>Materia: #{llamarListaBean.clase.idHorario.idMateria.descripcion}</h4>
+                <h3>Profesor: #{llamarListaBean.clase.idPersona.apellido} #{llamarListaBean.clase.idPersona.nombre}</h3>
+                <p:growl id="msg" globalOnly="true"/>
+                
+                <p:dataTable value="#{llamarListaBean.listadoMarcaciones}" var="marcacion" 
+                             paginator="true" rows="5" 
+                             emptyMessage="No existen registros" widgetVar="lista"
+                             id="idTableRow"
+                             styleClass="table_new">
+                    
+                    <!-- columnas de la tabla -->
+                    <p:column headerText="Nombre" sortBy="#{marcacion.idUsuario.idPersona.nombre}" filterBy="#{marcacion.idUsuario.idPersona.nombre}" filterMatchMode="contains">
+                        <h:outputText value="#{marcacion.idUsuario.idPersona.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Apellido" sortBy="#{marcacion.idUsuario.idPersona.apellido}" filterBy="#{marcacion.idUsuario.idPersona.apellido}" filterMatchMode="contains">
+                        <h:outputText value="#{marcacion.idUsuario.idPersona.apellido}"/>
+                    </p:column>
+                    <p:column headerText="Marcación" sortBy="#{marcacion.fecha}" filterBy="#{marcacion.fecha}" filterMatchMode="contains">
+                        <h:outputText value="#{marcacion.fecha}">
+                            <f:convertDateTime pattern="dd-MM-yyyy hh:mm:ss" timeZone="America/Asuncion"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column>
+                        <h:panelGroup rendered="#{marcacion.marcacionFueraRango eq true}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_desactivo.gif" width="14" height="15" align="center" />
+                        </h:panelGroup>
+                        <h:panelGroup rendered="#{marcacion.marcacionFueraRango eq false}">
+                            <img src="#{facesContext.externalContext.requestContextPath}/resources/images/ico_activo.gif" width="14" height="15" align="center" />
+                        </h:panelGroup>
+                    </p:column>
+                    <p:column>
+                        <p:selectBooleanCheckbox value="#{marcacion.habilitado}">
+                            <p:ajax listener="#{llamarListaBean.puntearListaDeAlumnos}" />
+                        </p:selectBooleanCheckbox>
+                    </p:column>
+                    
+                </p:dataTable>
+                
+                <p/><p/>
+                <p:row>
+                    <div align="right">
+                        <p:column>
+                            <!-- boton guardar -->
+                            <p:commandButton value="Confirmar" 
+                                             onclick="PF('confirmacion').show()"/>
+                        </p:column>
+                    </div>
+                </p:row>
+                             
+            </h:form>
+            
+            <p:confirmDialog widgetVar="confirmacion" 
+                             header="Confirmación" 
+                             message="¿Está seguro que desea confirmar?">
+                <h:form>
+                    <p:commandButton value="Aceptar" action="#{llamarListaBean.confirmarLista}" 
+                                     styleClass="ui-confirmdialog-yes" 
+                                     icon="ui-icon-check" update=":form_list"
+                                     oncomplete="PF('confirmacion').hide()"/>
+                    <p:commandButton value="Cancelar" type="button" 
+                                     onclick="PF('confirmacion').hide()" 
+                                     styleClass="ui-confirmdialog-no" 
+                                     icon="ui-icon-close"/>
+                </h:form>    
+            </p:confirmDialog>
+            
+            
+        </ui:define>
+    </ui:composition>
+</html>
+

@@ -19,6 +19,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -43,7 +44,15 @@ public class Marcacion implements Serializable {
     @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario idUsuario;
-
+    @Column(name = "verificada")
+    private boolean verificada;
+    
+    @Transient
+    private boolean marcacionFueraRango;
+    
+    @Transient
+    private boolean habilitado;
+        
     public Marcacion() {
     }
 
@@ -103,6 +112,30 @@ public class Marcacion implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.Marcacion[ idMarcacion=" + idMarcacion + " ]";
+    }
+
+    public boolean isMarcacionFueraRango() {
+        return marcacionFueraRango;
+    }
+
+    public void setMarcacionFueraRango(boolean marcacionFueraRango) {
+        this.marcacionFueraRango = marcacionFueraRango;
+    }
+
+    public boolean getHabilitado() {
+        return habilitado;
+    }
+
+    public void setHabilitado(boolean habilitado) {
+        this.habilitado = habilitado;
+    }
+
+    public boolean getVerificada() {
+        return verificada;
+    }
+
+    public void setVerificada(boolean verificada) {
+        this.verificada = verificada;
     }
     
 }

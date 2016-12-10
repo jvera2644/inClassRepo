@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -68,6 +69,9 @@ public class Horario implements Serializable {
     private Collection<Asistencia> asistenciaCollection;
     @Column(name = "estado")
     private int estado;
+    
+    @Transient
+    private boolean claseIniciadaEnHorario;
 
     public Horario() {
     }
@@ -194,6 +198,14 @@ public class Horario implements Serializable {
 
     public void setEstado(int estado) {
         this.estado = estado;
+    }
+
+    public boolean getClaseIniciadaEnHorario() {
+        return claseIniciadaEnHorario;
+    }
+
+    public void setClaseIniciadaEnHorario(boolean claseIniciadaEnHorario) {
+        this.claseIniciadaEnHorario = claseIniciadaEnHorario;
     }
     
 }

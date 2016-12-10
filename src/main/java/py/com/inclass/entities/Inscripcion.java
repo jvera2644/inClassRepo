@@ -46,7 +46,9 @@ public class Inscripcion implements Serializable {
     @JoinColumn(name = "id_horario", referencedColumnName = "id_horario")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Horario idHorario;
-
+    @Column(name = "estado")
+    private int estado;
+    
     public Inscripcion() {
     }
 
@@ -114,6 +116,14 @@ public class Inscripcion implements Serializable {
     @Override
     public String toString() {
         return "py.com.inclass.entities.Inscripcion[ idInscripcion=" + idInscripcion + " ]";
+    }
+
+    public int getEstado() {
+        return estado;
+    }
+
+    public void setEstado(int estado) {
+        this.estado = estado;
     }
     
 }

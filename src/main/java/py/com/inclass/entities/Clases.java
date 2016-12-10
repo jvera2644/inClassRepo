@@ -40,8 +40,6 @@ public class Clases implements Serializable {
     @Column(name = "fecha_hora_inicio")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraInicio;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "fecha_hora_fin")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaHoraFin;

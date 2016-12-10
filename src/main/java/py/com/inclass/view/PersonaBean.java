@@ -116,7 +116,7 @@ public class PersonaBean extends BaseBean {
         paisSeleccionado = null;
         departamentoSeleccionado = null;
         ciudadSeleccionado = null;
-        abrirNuevoPersona("PF('dialogo').show();");
+        abrirNuevoPersona("PF('dialogo').show(); PF('dialogo').content.scrollTop('0')");
     }
     
     public void editar(){

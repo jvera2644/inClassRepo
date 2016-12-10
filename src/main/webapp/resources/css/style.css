@@ -6,6 +6,12 @@ body {
     color:#2c3e50;
 }
 
+.ui-dialog-content{ 
+    max-width: 950px !important; 
+    max-height: 700px !important;
+    margin-bottom: 5px !important;
+}
+
 strong { 
     font-weight:bold;
 }
