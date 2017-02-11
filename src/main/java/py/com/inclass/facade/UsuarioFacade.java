@@ -80,5 +80,5 @@ public class UsuarioFacade extends AbstractFacade<Usuario>{
             logger.error("Error al obtener el usuario (por nombre de usuario) "+ nombreUsuario + ".", e);
         }
         return u;
-    }   
+    }    
 }

@@ -18,12 +18,12 @@ import py.com.inclass.entities.Permiso;
 import py.com.inclass.entities.Rol;
 import py.com.inclass.facade.PermisoFacade;
 import py.com.inclass.facade.RolFacade;
-import py.com.inclass.util.BaseBean;
+import py.com.inclass.util.BaseBean; 
 
 /**
  *
  * @author Edu
- */
+ */  
 @ViewScoped
 @ManagedBean
 public class RolBean extends BaseBean {
