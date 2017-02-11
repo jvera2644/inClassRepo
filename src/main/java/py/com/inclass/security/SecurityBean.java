@@ -8,7 +8,9 @@ import java.util.Map;
 import java.util.Set;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
@@ -16,10 +18,13 @@ import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
 import org.primefaces.model.menu.MenuModel;
+import org.primefaces.push.EventBus;
+import org.primefaces.push.EventBusFactory;
+import org.primefaces.push.PushContext;
+import org.primefaces.push.PushContextFactory;
 import py.com.inclass.entities.Menu;
 import py.com.inclass.entities.Parametro;
 import py.com.inclass.entities.Permiso;
-import py.com.inclass.entities.Persona;
 import py.com.inclass.entities.Rol;
 import py.com.inclass.entities.Usuario;
 import py.com.inclass.facade.MenuFacade;
@@ -27,6 +32,7 @@ import py.com.inclass.facade.ParametroFacade;
 import py.com.inclass.facade.UsuarioFacade;
 import py.com.inclass.util.BaseBean;
 import py.com.inclass.util.ParametroEnum;
+import py.com.inclass.view.GrowlBean;
 
 /**
  *
@@ -35,7 +41,7 @@ import py.com.inclass.util.ParametroEnum;
 @ManagedBean(name = "SecurityBean")
 @SessionScoped
 public class SecurityBean extends BaseBean {
-
+    
     private String userName;
     private String password;
     private String nuevoPassword;
@@ -56,7 +62,7 @@ public class SecurityBean extends BaseBean {
     private Usuario usuario;
     private boolean tienePermiso;
     private MenuModel menus;
-
+   
     @PostConstruct
     public void init() {
         userName = "";
@@ -142,7 +148,7 @@ public class SecurityBean extends BaseBean {
             DefaultMenuItem item = new DefaultMenuItem();
             item.setValue(permiso.getDescripcion().toUpperCase());
             item.setUrl(formatearUrl(permiso.getUrlPrograma()));
-            item.setIcon("ui-icon-star");
+            //item.setIcon("ui-icon-star");
             for (DefaultSubMenu subm : subMenuList) {
                 if (subm.getLabel().equals(permiso.getIdMenu().getNombre())) {
                     subm.addElement(item);
@@ -176,6 +182,7 @@ public class SecurityBean extends BaseBean {
                         usuario.setIntentoFallido(0);
                         usuarioFacade.edit(usuario);
                     }
+                    notificarPush();
                     return "/template/menu?faces-redirect=true";
                 } else {                      //inactivo
                     setWarnMessage("Usuario inactivo");
@@ -219,6 +226,23 @@ public class SecurityBean extends BaseBean {
             context.getExternalContext().redirect(url);
         } catch (IOException ex) {
             logger.error("logout", ex);
+        }
+    }
+    
+    private void notificarPush(){
+        String channel = null;
+        PushContext pushContext = null;
+        try{
+            String summary = "¡Hola!";
+            String detail = "¡¡¡Push!!!!";
+            channel = "/notify";
+
+            pushContext = PushContextFactory.getDefault().getPushContext();
+            pushContext.push(channel, new FacesMessage(summary, detail));
+            setInfoMessage("Hola!");
+            System.out.println("!!!");
+        }catch(Exception e){
+            throw new RuntimeException("Error al enviar mensaje por canal: "+channel, e);
         }
     }
 

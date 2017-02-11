@@ -62,8 +62,6 @@ public class HorarioProfesorBean extends BaseBean {
     private ParametroFacade parametroFacade;
     
     
-    
-    
     //variables de clase
     private List<Horario> horarios;
     private Horario horario;
@@ -174,7 +172,6 @@ public class HorarioProfesorBean extends BaseBean {
         }
         return true;
     }
-    
         
     //getters && setters
     public List<Horario> getHorarios() {

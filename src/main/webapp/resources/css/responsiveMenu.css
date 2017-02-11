@@ -1,0 +1,25 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 11/12/2016, 10:07:04 AM
+    Author     : Edu
+*/
+
+@media screen and (min-width : 700px) and (max-width : 1280px){
+    .verticalmenu{
+        display: none !important;
+    }
+}
+
+@media screen and (max-width : 700px){
+    .horizontalmenu{
+        display: none !important;
+    }
+}
+
+.menuFont{
+    font-size: 0.8em;
+}

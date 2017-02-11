@@ -18,7 +18,7 @@
                 <p:growl id="msg" globalOnly="true"/>
                 
                 <p:dataTable value="#{horarioProfesorBean.horarios}" var="horario" 
-                             paginator="true" rows="5" 
+                             paginator="true" rows="10" 
                              emptyMessage="No existen registros" widgetVar="lista"
                              id="idTableRow"
                              styleClass="table_new">
@@ -58,7 +58,7 @@
                             <p:commandLink action="#{horarioProfesorBean.iniciarClase}" 
                                             title="Iniciar Clase" 
                                             update="form_list">
-                                 <p:graphicImage value="../../resources/images/active.png"/>
+                                 <p:graphicImage value="../../resources/images/inicio.png"/>
                                  <f:setPropertyActionListener value="#{horario}" target="#{horarioProfesorBean.horario}"/>
                             </p:commandLink>
                         </h:panelGroup>
@@ -66,7 +66,7 @@
                             <p:commandLink action="#" 
                                            disabled="true"
                                            title="Clase iniciada">
-                                 <p:graphicImage value="../../resources/images/inactive.png"/>
+                                 <p:graphicImage value="../../resources/images/finalizacion.png"/>
                             </p:commandLink>
                         </h:panelGroup>
                     </p:column>

@@ -19,7 +19,7 @@
                 <p:growl id="msg" globalOnly="true"/>
                 
                 <p:dataTable value="#{claseBean.clases}" var="clase" 
-                             paginator="true" rows="5" 
+                             paginator="true" rows="10" 
                              emptyMessage="No existen registros" widgetVar="lista"
                              id="idTableRow"
                              styleClass="table_new">
@@ -69,14 +69,14 @@
                             <p:commandLink action="#{llamarListaBean.listarMarcacionesDeAlumnos}" 
                                             title="Finalizar Clase"
                                             ajax="false">
-                                 <p:graphicImage value="../../resources/images/active.png"/>
+                                 <p:graphicImage value="../../resources/images/finalizacion.png"/>
                                  <f:param name="claseId" value="#{clase.idClases}" />
                             </p:commandLink>
                         </h:panelGroup>
                         <h:panelGroup rendered="#{clase.fechaHoraFin ne null}">
                             <p:commandLink action="#" 
                                            disabled="true">
-                                 <p:graphicImage value="../../resources/images/inactive.png"/>
+                                 <p:graphicImage value="../../resources/images/inicio.png"/>
                             </p:commandLink>
                         </h:panelGroup>
                     </p:column>
