@@ -76,11 +76,10 @@
             
             <!-- formulario listado -->
             <h:form id="form_list">
-                <h1>Listado de Nacionalidades</h1><br/>
                 <p:growl id="msg" globalOnly="true"/>
                 
                 <p:dataTable value="#{nacionalidadBean.nacionalidades}" var="nacionalidad" 
-                             paginator="true" rows="5" 
+                             paginator="true" rows="10" 
                              emptyMessage="No existen registros" widgetVar="lista"
                              id="idTableRow"
                              styleClass="table_new">
@@ -93,10 +92,8 @@
                                          actionListener="#{nacionalidadBean.nuevo}"
                                          update=":form_new_edit:panelGrid"/>
                         
-                        <!-- buscador en la tabla -->
                         <p:outputPanel style="text-align: right">
-                            <h:outputText value="Buscar: " />
-                            <p:inputText id="globalFilter" onkeyup="PF('lista').filter()" placeholder="Buscar .."/>
+                            <u><h2>Nacionalidades</h2></u>
                         </p:outputPanel>
                         
                     </f:facet>

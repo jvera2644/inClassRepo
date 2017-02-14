@@ -86,6 +86,12 @@ public class DateUtil {
     }
     
     
+    public static String formaterDateTimeToString(Date fecha){
+        SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy hh.mm.ss");
+        String date = DATE_FORMAT.format(fecha);
+        return date;
+    }
+    
     public static Date formaterStringToDate(String fecha) throws ParseException{
         SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("dd-MM-yyyy");
         Date date = DATE_FORMAT.parse(fecha);

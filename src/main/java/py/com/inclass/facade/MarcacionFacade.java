@@ -63,7 +63,7 @@ public class MarcacionFacade  extends AbstractFacade<Marcacion>{
     
     public List<Marcacion> getMarcacionesFueraRango(Date fechaHoraFinLimite, Persona persona) {
         try {
-            Query query = em.createQuery("select u from Marcacion u where u.fecha > :fechaHoraFinLimite and u.idUsuario.idPersona = :persona and u.verificada = false order by u.idMarcacion asc");
+                Query query = em.createQuery("select u from Marcacion u where u.fecha > :fechaHoraFinLimite and u.idUsuario.idPersona = :persona and u.verificada = false order by u.idMarcacion asc");
             query.setParameter("fechaHoraFinLimite", fechaHoraFinLimite);
             query.setParameter("persona", persona);
             return query.getResultList();

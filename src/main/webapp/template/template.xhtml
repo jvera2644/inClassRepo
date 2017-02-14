@@ -17,7 +17,7 @@
               type="text/css"
               media="screen"/>
         <h:outputScript library="js" name="javascript.js"/>
-        
+                
         <title>
             <ui:insert name="title"></ui:insert>
         </title>
@@ -66,18 +66,31 @@
             function validate(input){
                 input.value = input.toUpperCase();
             } 
-
+                        
         </script>
         
     </h:head>
-
+    
+    
+    
     <h:body>
+        
+        <script type="text/javascript">
+               function handleMessage(facesmessage) {
+                   facesmessage.severity = 'info';
+                   PF('growl').show([facesmessage]);
+               }
+        </script>
+        
+        <p:growl widgetVar="growl" showDetail="true" />
         
         <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
 
         <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false">
             <img src="#{facesContext.externalContext.requestContextPath}/resources/images/loading.gif" />
         </p:dialog>
+        
+        <p:socket onMessage="handleMessage" channel="/notify"/>  
         
         <div id="top" class="top">
             <ui:insert name="top">             
@@ -195,14 +208,19 @@
         <div>
             <div id="left">
                 <ui:insert name="left">
-                    <h:form>
-                        <p:menu style="width: 210px" model="#{SecurityBean.menus}"/>
+                    <h:form style="width:400px;">
+                        <p:menubar model="#{SecurityBean.menus}"/>
                     </h:form>
                 </ui:insert>
             </div>
-            <div id="content" class="left_content">
-                <ui:insert name="content"></ui:insert>
-            </div>
+        </div>
+        <br/><br/><br/><br/>
+        <div id="content">
+            <ui:insert name="content"></ui:insert>
+        </div>
+        <br/>
+        <div id="footer" align="center">
+            © Copyright 2017 @ebarbozab | @jvera
         </div>
     </h:body>
 
